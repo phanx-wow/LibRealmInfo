@@ -53,7 +53,7 @@ Note that in 6.x the GUID format will change depending on the unit type; the abo
 
 ## Author & Credits
 
-Written by [Phanx](mailto:addons@phanx.net) widh data collected by
+Written by [Phanx](mailto:addons@phanx.net) with data collected by
 [Vlad](http://www.wowinterface.com/forums/showthread.php?p=294425#post294425)
 and [Semlar](http://www.wowinterface.com/forums/showthread.php?p=294432#post294432).
 
