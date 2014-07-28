@@ -1,0 +1,22 @@
+## Interface: 50800
+## Version: 1
+
+## Title: Lib: Realm Info
+## Notes: Library to provide information about realms.
+## Notes-deDE: Bibliothek, um Informationen über Realms zu liefern.
+## Notes-esES: Biblioteca para proporcionar información sobre reinos.
+## Notes-esMX: Biblioteca para proporcionar información sobre reinos.
+
+## Author: Phanx
+## X-Email: addons@phanx.net
+## X-License: Public domain via The Unlicense. See LICENSE file for details.
+## X-Website: https://github.com/phanx/wow-librealminfo
+## X-Curse-Project-ID: librealminfo
+## X-WoWI-ID: 
+
+## OptionalDeps: LibStub, CallbackHandler-1.0
+
+Libs\LibStub\LibStub.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
+
+LibRealmInfo\LibRealmInfo.lua

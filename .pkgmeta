@@ -1,0 +1,15 @@
+package-as: LibRealmInfo
+
+enable-nolib-creation: no
+
+manual-changelog:
+    filename: CHANGELOG.txt
+    markup-type: markdown
+
+externals:
+    Libs/LibStub:
+        url: svn://svn.wowace.com/wow/libstub/mainline/trunk
+        tag: latest
+    Libs/CallbackHandler-1.0:
+        url: svn://svn.wowace.com/wow/callbackhandler/mainline/trunk/CallbackHandler-1.0
+        tag: latest
