@@ -9,7 +9,7 @@ World of Warcraft library for obtaining information about realms.
 * [WoWInterface](http://www.wowinterface.com/downloads/info)
 
 
-## Bugs & Requests
+## Source & Issues
 
 * [GitHub](https://github.com/phanx/wow-librealminfo)
 
@@ -40,7 +40,7 @@ or [BNGetFriendToonInfo](http://wowpedia.org/API_BNGetToonInfo):
 
 	_, _, _, _, realmID = BNGetFriendToonInfo(friendIndex, toonIndex)
 
-The player's own presenceID can be obtained using BNGetInfo:
+The player's own presenceID can be obtained using [BNGetInfo](http://wowpedia.org/API_BNGetInfo):
 
 	presenceID = BNGetInfo()
 
@@ -48,7 +48,7 @@ In WoW 6.x (Warlords of Draenor) realm IDs can be obtained directly from GUIDs:
 
 	_, realmID = strsplit(":", UnitGUID("player"))
 
-Note that in 6.x the GUID format will change depending on the unit type; the above example will only work for player units. See here for more information.
+Note that in 6.x the GUID format will change depending on the unit type; the above example will only work for player units. See [this WoWI thread](http://www.wowinterface.com/forums/showthread.php?t=49503) for more information.
 
 
 ## Author & Credits
