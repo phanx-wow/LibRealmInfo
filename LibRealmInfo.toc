@@ -14,9 +14,7 @@
 ## X-Curse-Project-ID: librealminfo
 ## X-WoWI-ID: 
 
-## OptionalDeps: LibStub, CallbackHandler-1.0
-
+## OptionalDeps: LibStub
 Libs\LibStub\LibStub.lua
-Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
 
 LibRealmInfo\LibRealmInfo.lua
