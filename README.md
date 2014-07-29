@@ -57,7 +57,7 @@ Note that in 6.x the GUID format will change depending on the unit type; the abo
 
 ## Author & Credits
 
-Library written by [Phanx](mailto:addons@phanx.net) with data collected by [Semlar](http://www.wowinterface.com/forums/showthread.php?p=294432#post294432), [TOM_RUS](http://www.wowinterface.com/forums/showthread.php?p=294512#post294512) [Vlad](http://www.wowinterface.com/forums/showthread.php?p=294425#post294425).
+Library written by [Phanx](mailto:addons@phanx.net) with data collected by [Semlar](http://www.wowinterface.com/forums/showthread.php?p=294432#post294432), [TOM_RUS](http://www.wowinterface.com/forums/showthread.php?p=294512#post294512), and [Vlad](http://www.wowinterface.com/forums/showthread.php?p=294425#post294425).
 
 
 ## License
