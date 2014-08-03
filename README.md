@@ -1,4 +1,5 @@
-﻿# LibRealmInfo
+﻿LibRealmInfo
+============
 
 World of Warcraft library for obtaining information about realms.
 
@@ -8,7 +9,35 @@ World of Warcraft library for obtaining information about realms.
 * **API Documentation:** [GitHub Wiki](https://github.com/Phanx/LibRealmInfo/wiki)
 
 
-## License
+Usage
+-----
+
+`LibStub("LibRealmInfo"):GetRealmInfo(realmID)`  
+=> name, apiName, rules, locale, battlegroup, region, timezone, connected, latinName
+
+`LibStub("LibRealmInfo"):GetRealmInfoByName(name, region)`  
+=> realmID, name, apiName, rules, locale, battlegroup, region, timezone, connected, latinName
+
+`LibStub("LibRealmInfo"):GetRealmInfoByUnit(unit)`  
+=> realmID, name, apiName, rules, locale, battlegroup, region, timezone, connected, latinName
+
+See the [API documentation](https://github.com/Phanx/LibRealmInfo/wiki) on GitHub for more details!
+
+
+To Do
+-----
+
+#### Data for Korean realms?
+
+If you have an active Korean account, please see [this forum post](http://www.wowinterface.com/forums/showthread.php?p=294425#post294425). If you don't know how to run the script provided there, you can just post the whole HTML source of the relevant page (right-click > view source > save, then attach the file to your post).
+
+#### Timezones for Russian realms?
+
+If you are able to log onto Russian realms, please report back with the server time offset from GMT.
+
+
+License
+-------
 
 This is free and unencumbered software released into the public domain.
 
