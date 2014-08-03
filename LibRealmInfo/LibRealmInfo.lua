@@ -2,28 +2,136 @@
 	LibRealmInfo
 	World of Warcraft library for obtaining information about realms.
 	by Phanx <addons@phanx.net>
-	https://github.com/phanx/wow-librealminfo
+	https://github.com/Phanx/LibRealmInfo
 	http://wow.curseforge.com/addons/librealminfo
-	http://www.wowinterface.com/downloads/info22987
+	http://www.wowinterface.com/downloads/info22987-LibRealmInfo
 	This is free and unencumbered software released into the public domain.
 ----------------------------------------------------------------------]]
 
-local MAJOR, MINOR = "LibRealmInfo", 1
+local MAJOR, MINOR = "LibRealmInfo", 3
 assert(LibStub, MAJOR.." requires LibStub")
 local lib, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
-local data
 local standalone = (...) == MAJOR
+local data, connections
+local Unpack
 
 function lib:GetRealmInfo(realmID)
-	local info = data[tonumber(realmID) or ""]
+	realmID = tonumber(realmID)
+	if not realmID then return end
+
+	if Unpack then
+		Unpack()
+	end
+
+	local info = data[realmID]
 	if info then
-		return strsplit(",", info)
+		return info.name, info.apiName, info.rules, info.locale, info.battlegroup, info.region, info.timezone, info.connected, info.latinName
 	elseif standalone then
 		return print("|cffff7f7f["..MAJOR.."]|r No info found for realm", realmID)
 	end
 end
+
+------------------------------------------------------------------------
+
+local currentRegion
+local localeToRegion = { deDE = "EU", esES = "EU", esMX = "US", frFR = "EU", itIT = "EU", ruRU = "EU", koKR = "KR", enCN = "CN", zhCN = "CN", enTW = "TW", zhTW = "TW" }
+-- enGB client returns enUS, ptPT client returns ptBR, no way to tell what's what
+-- not actually sure if enCN and enTW return accurately
+
+local function GetCurrentRegion()
+	if not currentRegion then
+		local realmID, _ = tonumber(strmatch(UnitGUID("player"), "Player:(%d+)"))
+		if not realmID then
+			_, _, _, _, realmID = BNGetToonInfo(BNGetInfo() or 1)
+		end
+		if realmID then
+			_, _, _, _, currentRegion = self:GetRealmInfo(realmID)
+		end
+		if not currentRegion then
+			currentRegion = localeToRegion[GetLocale()]
+		end
+		if not currentRegion then
+			return standalone and print("|cffff7f7f["..MAJOR.."]|r Could not determine current region") or nil
+		end
+	end
+	return currentRegion
+end
+
+function lib:GetRealmInfoByName(searchName, searchRegion)
+	searchName = gsub(searchName, "%s", "")
+	searchRegion = searchRegion or GetCurrentRegion()
+
+	if Unpack then
+		Unpack()
+	end
+
+	for id, info in pairs(data) do
+		if info.region == searchRegion and info.apiName == searchName then
+			return id, info.name, info.apiName, info.rules, info.locale, info.battlegroup, info.region, info.timezone, info.connected, info.latinName
+		end
+	end
+end
+
+------------------------------------------------------------------------
+
+function lib:GetRealmInfoByUnit(unit)
+	local guid = unit and UnitGUID(unit)
+	if guid then
+		local realmID = tonumber(strmatch(guid, "Player:(%d+)"))
+		if realmID then
+			return self:GetRealmInfo(realmID)
+		end
+	end
+end
+
+------------------------------------------------------------------------
+
+function Unpack()
+	if standalone then
+		print("|cffff7f7f["..MAJOR.."]|r Unpacking data...")
+	end
+
+	for id, info in pairs(data) do
+		local name, rules, locale, battlegroup, region, timezone = strsplit(",", info)
+		local name, translit = strsplit("|", name)
+		data[id] = {
+			name = name,
+			apiName = (gsub(name, "%s", "")),
+			latinName = translit, -- only for ruRU language realms
+			rules = rules,
+			locale = locale,
+			battlegroup = battlegroup,
+			region = region,
+			timezone = timezone, -- only for US region realms
+		}
+	end
+
+	for i = 1, #connections do
+		local t = { strsplit(",", connections[i]) }
+		for j = 1, #t do
+			local id = tonumber(t[j])
+			t[j] = id
+			local info = data[id]
+			if info then
+				info.connected = t
+			elseif standalone then
+				print("|cffff7f7f["..MAJOR.."]|r No data for connected realm", id, "from", connections[i])
+			end
+		end
+	end
+
+	connections = nil
+	Unpack = nil
+	collectgarbage()
+
+	if standalone then
+		print("|cffff7f7f["..MAJOR.."]|r Done unpacking data.")
+	end
+end
+
+------------------------------------------------------------------------
 
 data = {
 --{{ NORTH AMERICA
@@ -190,7 +298,6 @@ data = {
 [1182]="Muradin,PVE,enUS,Vengeance,US,CST",
 [1432]="Nagrand,PVE,enUS,Bloodlust,US,AEST",
 [89]="Nathrezim,PVP,enUS,Vengeance,US,MST",
-[1169]={"Naxxramas","RP","","enUS","US",""},
 [1367]="Nazgrel,PVE,enUS,Bloodlust,US,EST",
 [1131]="Nazjatar,PVP,enUS,Ruin,US,PST",
 [3208]="Nemesis,PVP,ptBR,Rampage,US",
@@ -269,7 +376,6 @@ data = {
 [87]="Windrunner,PVE,enUS,Reckoning,US,PST",
 [1355]="Winterhoof,PVE,enUS,Bloodlust,US,CST",
 [1369]="Wyrmrest Accord,RP,enUS,Cyclone,US,PST",
-[1174]={"Xavius","PVE","","enUS","US",""},
 [1270]="Ysera,PVE,enUS,Ruin,US,EST",
 [1268]="Ysondre,PVP,enUS,Ruin,US,EST",
 [1572]="Zangarmarsh,PVE,enUS,Rampage,US,MST",
@@ -301,27 +407,27 @@ data = {
 [536]="Argent Dawn,RP,enGB,Reckoning / Abrechnung,EU",
 [578]="Arthas,PVP,deDE,Glutsturm / Emberstorm,EU",
 [1406]="Arygos,PVE,deDE,Embuscade / Hinterhalt,EU",
-[1923]="Ashenvale,PVP,ruRU,Vindication,EU",
+[1923]="Ясеневый лес|Ashenvale,PVP,ruRU,Vindication,EU",
 [502]="Aszune,PVE,enGB,Reckoning / Abrechnung,EU",
 [1597]="Auchindoun,PVP,enGB,Vindication,EU",
 [503]="Azjol-Nerub,PVE,enGB,Cruelty / Crueldad,EU",
 [579]="Azshara,PVP,deDE,Glutsturm / Emberstorm,EU",
-[1922]="Azuregos,PVE,ruRU,Vindication,EU",
+[1922]="Азурегос|Azuregos,PVE,ruRU,Vindication,EU",
 [1417]="Azuremyst,PVE,enGB,Glutsturm / Emberstorm,EU",
 [565]="Baelgun,PVE,deDE,Reckoning / Abrechnung,EU",
 [607]="Balnazzar,PVP,enGB,Vindication,EU",
 [566]="Blackhand,PVE,deDE,Vengeance / Rache,EU",
 [580]="Blackmoore,PVP,deDE,Glutsturm / Emberstorm,EU",
 [581]="Blackrock,PVP,deDE,Glutsturm / Emberstorm,EU",
-[1929]="Blackscar,PVP,ruRU,Vindication,EU",
+[1929]="Черный Шрам|Blackscar,PVP,ruRU,Vindication,EU",
 [1416]="Blade's Edge,PVE,enGB,Glutsturm / Emberstorm,EU",
 [521]="Bladefist,PVP,enGB,Cruelty / Crueldad,EU",
 [630]="Bloodfeather,PVP,enGB,Cruelty / Crueldad,EU",
 [504]="Bloodhoof,PVE,enGB,Reckoning / Abrechnung,EU",
 [522]="Bloodscalp,PVP,enGB,Reckoning / Abrechnung,EU",
 [1613]="Blutkessel,PVP,deDE,Glutsturm / Emberstorm,EU",
-[1924]="Booty Bay,PVP,ruRU,Vindication,EU",
-[1625]="Borean Tundra,PVE,ruRU,Sturmangriff / Charge,EU",
+[1924]="Пиратская бухта|Booty Bay,PVP,ruRU,Vindication,EU",
+[1625]="Борейская тундра|Borean Tundra,PVE,ruRU,Sturmangriff / Charge,EU",
 [1299]="Boulderfist,PVP,enGB,Vindication,EU",
 [1393]="Bronze Dragonflight,PVE,enGB,Cruelty / Crueldad,EU",
 [1081]="Bronzebeard,PVE,enGB,Reckoning / Abrechnung,EU",
@@ -346,10 +452,10 @@ data = {
 [1389]="Darkspear,PVE,enGB,Cruelty / Crueldad,EU",
 [1619]="Das Konsortium,RPPVP,deDE,Glutsturm / Emberstorm,EU",
 [614]="Das Syndikat,RPPVP,deDE,Glutsturm / Emberstorm,EU",
-[1605]="Deathguard,PVP,ruRU,Vindication,EU",
-[1617]="Deathweaver,PVP,ruRU,Vindication,EU",
+[1605]="Страж Смерти|Deathguard,PVP,ruRU,Vindication,EU",
+[1617]="Ткач Смерти|Deathweaver,PVP,ruRU,Vindication,EU",
 [527]="Deathwing,PVP,enGB,Vindication,EU",
-[1609]="Deepholm,PVP,ruRU,Sturmangriff / Charge,EU",
+[1609]="Подземье|Deepholm,PVP,ruRU,Sturmangriff / Charge,EU",
 [635]="Defias Brotherhood,RPPVP,enGB,Glutsturm / Emberstorm,EU",
 [1084]="Dentarg,PVP,enGB,Reckoning / Abrechnung,EU",
 [1327]="Der Mithrilorden,RP,deDE,Embuscade / Hinterhalt,EU",
@@ -382,34 +488,34 @@ data = {
 [1091]="Emeriss,PVP,enGB,Reckoning / Abrechnung,EU",
 [1310]="Eonar,PVE,enGB,Glutsturm / Emberstorm,EU",
 [583]="Eredar,PVP,deDE,Vengeance / Rache,EU",
-[1925]="Eversong,PVE,ruRU,Vindication,EU",
+[1925]="Вечная Песня|Eversong,PVE,ruRU,Vindication,EU",
 [1087]="Executus,PVP,enGB,Cruelty / Crueldad,EU",
 [1385]="Exodar,PVE,esES,Cruelty / Crueldad,EU",
 [1611]="Festung der Stürme,PVP,deDE,Glutsturm / Emberstorm,EU",
-[1623]="Fordragon,PVE,ruRU,Sturmangriff / Charge,EU",
+[1623]="Дракономор|Fordragon,PVE,ruRU,Sturmangriff / Charge,EU",
 [516]="Forscherliga,RP,deDE,Embuscade / Hinterhalt,EU",
 [1300]="Frostmane,PVP,enGB,Misery,EU",
 [584]="Frostmourne,PVP,deDE,Glutsturm / Emberstorm,EU",
 [632]="Frostwhisper,PVP,enGB,Cruelty / Crueldad,EU",
 [585]="Frostwolf,PVP,deDE,Vengeance / Rache,EU",
-[1614]="Galakrond,PVE,ruRU,Sturmangriff / Charge,EU",
+[1614]="Галакронд|Galakrond,PVE,ruRU,Sturmangriff / Charge,EU",
 [509]="Garona,PVP,frFR,Embuscade / Hinterhalt,EU",
 [1401]="Garrosh,PVE,deDE,Embuscade / Hinterhalt,EU",
 [606]="Genjuros,PVP,enGB,Cruelty / Crueldad,EU",
 [1588]="Ghostlands,PVE,enGB,Vindication,EU",
 [567]="Gilneas,PVE,deDE,Reckoning / Abrechnung,EU",
-[1928]="Goldrinn,PVE,ruRU,Vindication,EU",
-[1602]="Gordunni,PVP,ruRU,Vindication,EU",
+[1928]="Голдринн|Goldrinn,PVE,ruRU,Vindication,EU",
+[1602]="Гордунни|Gordunni,PVP,ruRU,Vindication,EU",
 [586]="Gorgonnash,PVP,deDE,Glutsturm / Emberstorm,EU",
-[1610]="Greymane,PVP,ruRU,Vindication,EU",
+[1610]="Седогрив|Greymane,PVP,ruRU,Vindication,EU",
 [1303]="Grim Batol,PVP,enGB,Misery,EU",
-[1927]="Grom,PVP,ruRU,Vindication,EU",
+[1927]="Гром|Grom,PVP,ruRU,Vindication,EU",
 [587]="Gul'dan,PVP,deDE,Glutsturm / Emberstorm,EU",
 [646]="Hakkar,PVP,enGB,Reckoning / Abrechnung,EU",
 [638]="Haomarush,PVP,enGB,Reckoning / Abrechnung,EU",
 [1587]="Hellfire,PVE,enGB,Vindication,EU",
 [619]="Hellscream,PVE,enGB,Vengeance / Rache,EU",
-[1615]="Howling Fjord,PVP,ruRU,Sturmangriff / Charge,EU",
+[1615]="Ревущий фьорд|Howling Fjord,PVP,ruRU,Sturmangriff / Charge,EU",
 [542]="Hyjal,PVE,frFR,Misery,EU",
 [541]="Illidan,PVP,frFR,Sturmangriff / Charge,EU",
 [1304]="Jaedenar,PVP,enGB,Vindication,EU",
@@ -433,7 +539,7 @@ data = {
 [621]="Laughing Skull,PVP,enGB,Vindication,EU",
 [1626]="Les Clairvoyants,RP,frFR,Embuscade / Hinterhalt,EU",
 [647]="Les Sentinelles,RP,frFR,Embuscade / Hinterhalt,EU",
-[1603]="Lich King,PVP,ruRU,Vindication,EU",
+[1603]="Король-лич|Lich King,PVP,ruRU,Vindication,EU",
 [1388]="Lightbringer,PVE,enGB,Cruelty / Crueldad,EU",
 [637]="Lightning's Blade,PVP,enGB,Vindication,EU",
 [1409]="Lordaeron,PVE,deDE,Glutsturm / Emberstorm,EU",
@@ -476,7 +582,7 @@ data = {
 [642]="Rashgarroth,PVP,frFR,Embuscade / Hinterhalt,EU",
 [554]="Ravencrest,PVP,enGB,Vengeance / Rache,EU",
 [1308]="Ravenholdt,RPPVP,enGB,Glutsturm / Emberstorm,EU",
-[1616]="Razuvious,PVP,ruRU,Sturmangriff / Charge,EU",
+[1616]="Разувий|Razuvious,PVP,ruRU,Sturmangriff / Charge,EU",
 [1099]="Rexxar,PVE,deDE,Reckoning / Abrechnung,EU",
 [547]="Runetotem,PVE,enGB,Misery,EU",
 [1382]="Sanguino,PVP,esES,Cruelty / Crueldad,EU",
@@ -492,7 +598,7 @@ data = {
 [549]="Silvermoon,PVE,enGB,Misery,EU",
 [533]="Sinstralis,PVP,frFR,Vengeance / Rache,EU",
 [557]="Skullcrusher,PVP,enGB,Glutsturm / Emberstorm,EU",
-[1604]="Soulflayer,PVP,ruRU,Vindication,EU",
+[1604]="Свежеватель Душ|Soulflayer,PVP,ruRU,Vindication,EU",
 [558]="Spinebreaker,PVP,enGB,Reckoning / Abrechnung,EU",
 [1606]="Sporeggar,RPPVP,enGB,Glutsturm / Emberstorm,EU",
 [1117]="Steamwheedle Cartel,RP,enGB,Reckoning / Abrechnung,EU",
@@ -514,7 +620,7 @@ data = {
 [1595]="The Sha'tar,RP,enGB,Reckoning / Abrechnung,EU",
 [636]="The Venture Co,RPPVP,enGB,Glutsturm / Emberstorm,EU",
 [605]="Theradras,PVP,deDE,Embuscade / Hinterhalt,EU",
-[1926]="Thermaplugg,PVP,ruRU,Vindication,EU",
+[1926]="Термоштепсель|Thermaplugg,PVP,ruRU,Vindication,EU",
 [604]="Thrall,PVE,deDE,Glutsturm / Emberstorm,EU",
 [643]="Throk'Feroth,PVP,frFR,Embuscade / Hinterhalt,EU",
 [552]="Thunderhorn,PVE,enGB,Misery,EU",
@@ -909,29 +1015,181 @@ data = {
 [1215]="龙骨平原,PVP,zhCN,Battle Group 11,CN",
 --}}
 --{{ TAIWAN
-[982]="世界之樹,PVE,zhTW,嗜血,TW", 
-[1038]="亞雷戈斯,PVE,zhTW,嗜血,TW", 
-[977]="冰霜之刺,PVP,zhTW,嗜血,TW", 
-[1001]="冰風崗哨,PVP,zhTW,嗜血,TW", 
-[979]="地獄吼,PVP,zhTW,嗜血,TW", 
-[1043]="夜空之歌,PVP,zhTW,嗜血,TW", 
-[980]="天空之牆,PVE,zhTW,嗜血,TW", 
-[1057]="寒冰皇冠,PVP,zhTW,嗜血,TW", 
-[964]="尖石,PVP,zhTW,嗜血,TW", 
-[1023]="屠魔山谷,PVP,zhTW,嗜血,TW", 
-[966]="巨龍之喉,PVP,zhTW,嗜血,TW", 
-[1049]="憤怒使者,PVP,zhTW,嗜血,TW", 
-[978]="日落沼澤,PVP,zhTW,嗜血,TW", 
-[963]="暗影之月,PVE,zhTW,嗜血,TW", 
-[985]="水晶之刺,PVP,zhTW,嗜血,TW", 
-[999]="狂熱之刃,PVP,zhTW,嗜血,TW", 
-[1056]="眾星之子,PVE,zhTW,嗜血,TW", 
-[1006]="米奈希爾,PVP,zhTW,嗜血,TW", 
-[1046]="聖光之願,PVE,zhTW,嗜血,TW", 
-[1037]="血之谷,PVP,zhTW,嗜血,TW", 
-[1033]="語風,PVE,zhTW,嗜血,TW", 
-[1048]="銀翼要塞,PVP,zhTW,嗜血,TW", 
-[1054]="阿薩斯,PVP,zhTW,嗜血,TW", 
+[982]="世界之樹,PVE,zhTW,嗜血,TW",
+[1038]="亞雷戈斯,PVE,zhTW,嗜血,TW",
+[977]="冰霜之刺,PVP,zhTW,嗜血,TW",
+[1001]="冰風崗哨,PVP,zhTW,嗜血,TW",
+[979]="地獄吼,PVP,zhTW,嗜血,TW",
+[1043]="夜空之歌,PVP,zhTW,嗜血,TW",
+[980]="天空之牆,PVE,zhTW,嗜血,TW",
+[1057]="寒冰皇冠,PVP,zhTW,嗜血,TW",
+[964]="尖石,PVP,zhTW,嗜血,TW",
+[1023]="屠魔山谷,PVP,zhTW,嗜血,TW",
+[966]="巨龍之喉,PVP,zhTW,嗜血,TW",
+[1049]="憤怒使者,PVP,zhTW,嗜血,TW",
+[978]="日落沼澤,PVP,zhTW,嗜血,TW",
+[963]="暗影之月,PVE,zhTW,嗜血,TW",
+[985]="水晶之刺,PVP,zhTW,嗜血,TW",
+[999]="狂熱之刃,PVP,zhTW,嗜血,TW",
+[1056]="眾星之子,PVE,zhTW,嗜血,TW",
+[1006]="米奈希爾,PVP,zhTW,嗜血,TW",
+[1046]="聖光之願,PVE,zhTW,嗜血,TW",
+[1037]="血之谷,PVP,zhTW,嗜血,TW",
+[1033]="語風,PVE,zhTW,嗜血,TW",
+[1048]="銀翼要塞,PVP,zhTW,嗜血,TW",
+[1054]="阿薩斯,PVP,zhTW,嗜血,TW",
 [965]="雷鱗,PVP,zhTW,嗜血,TW",
 --}}
 }
+
+------------------------------------------------------------------------
+
+connections = {
+--{{ NORTH AMERICA
+"1136,83,109,129,1142",
+"1129,56,1291,1559", -- 102 added Aug 14
+"106,1576",
+"1137,84,1145",
+"1070,1563",
+"52,65",
+"1282,1264,78,1268",
+"1293,1075,80,1344,71",
+"1276,1267,156,1259",
+"1363,116",
+"1346,1138,107,1141,89,130",
+"1288,1294",
+"1165,1377",
+"75,1570",
+"1297,99",
+"1555,1067,101",
+"77,1128,79,103",
+"121,1143",
+"1549,160",
+"1190,13",
+"1280,1068,74",
+"54,1581",
+"1347,125",
+"1296,81,154,1266,1295",
+"1353,1147,1182,1359",
+"1564,105",
+"1558,70,1131",
+"64,1258",
+"119,112,111,1357,108",
+"1371,85",
+"117,1364",
+"91,95,1285",
+"1430,1432",
+"1361,122",
+"1556,1278,157,1286",
+"1351,87",
+"1434,1134",
+"1582,1173",
+"15,1277,155,1557",
+"1271,55",
+"115,1342",
+"114,1345",
+"1139,113",
+"1362,127,1148,1358,124,110",
+"1140,131",
+"1429,1433",
+"63,1270",
+"47,1354",
+"123,1349",
+"67,97",
+"96,1567",
+"93,92,82,159",
+"1565,62",
+"1370,12,1154",
+"118,126",
+"128,8,1360",
+"7,1348",
+"1578,1069",
+"1287,153",
+"158,1292",
+"1579,68",
+"1149,1144",
+"53,1572",
+"1368,90",
+"14,104",
+"98,1262",
+"4,1355",
+"1071,1290,1260",
+"163,1289",
+"1132,1175",
+"1350,1151",
+"1374,86",
+"1367,1375,1184",
+"1372,1185",
+"1072,1283",
+"1352,164",
+"151,3",
+--"94,154", -- August 7
+--"72,157", -- "Future"
+--}}
+--{{ EUROPE
+"1312,1081",
+"518,522,525,1091,646",
+"1413,1303",
+"500,619",
+"1093,607,1299,1083,526,621,1598,511,1090,1088",
+"562,1607",
+"1330,568",
+"1104,1611,587,1322",
+"512,642,643",
+"1334,541,1624,1622",
+"501,1587",
+"1404,602,1400",
+"578,1613,1318",
+"1406,569",
+"1597,529,1304",
+"503,623",
+"565,570",
+"521,515",
+"630,1392,1087,633,1596",
+"504,1080",
+"1924,1617",
+"1393,618",
+"523,1092,600,1408",
+"545,1336,533",
+"1395,1387,1384",
+"1127,1626",
+"644,1337,1086",
+"538,1621",
+"1321,1105",
+"1317,561",
+"631,606,624",
+"1389,1314",
+"614,1326,1121,1119",
+"527,1596,637",
+"1609,1616",
+"1084,1306",
+"531,1319,615,605",
+"507,1588",
+"528,638,558,559,629",
+"535,1328",
+"535,590,1320",
+"1123,1332",
+"540,645",
+"1385,1386",
+"509,544",
+"1401,574,1608",
+"567,1323",
+"1610,1603",
+"1927,1926",
+"1311,1589,547",
+"1388,1089",
+"1409,1106",
+"1324,1097",
+"517,1331",
+"1085,1595",
+"612,591,611",
+"575,1407",
+"1308,1096,1606,636",
+"1382,1383,1380,1379",
+"557,639",
+"552,1313",
+--}}
+}
+
+_G.RealmInfo=data
+_G.ConnectedRealms=connections

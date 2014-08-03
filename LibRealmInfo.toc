@@ -1,5 +1,5 @@
 ## Interface: 50400
-## Version: 3
+## Version: 4
 
 ## Title: Lib: Realm Info
 ## Notes: Library to provide information about realms.
@@ -9,12 +9,12 @@
 
 ## Author: Phanx
 ## X-Email: addons@phanx.net
-## X-License: Public Domain via The Unlicense. See LICENSE file for details.
-## X-Website: https://github.com/phanx/wow-librealminfo
+## X-License: Public Domain. See LICENSE file for details.
+## X-Website: https://github.com/Phanx/LibRealmInfo
 ## X-Curse-Project-ID: librealminfo
 ## X-WoWI-ID: 22987
 
 ## OptionalDeps: LibStub
-Libs\LibStub\LibStub.lua
+LibStub\LibStub.lua
 
 LibRealmInfo\LibRealmInfo.lua
