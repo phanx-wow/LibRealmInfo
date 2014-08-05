@@ -1,10 +1,32 @@
-# OS files
-
+###############
+# OSX garbage #
+###############
+._*
+.apdisk
+.AppleDB
+.AppleDesktop
+.AppleDouble
+.directory
 .DS_Store
 .DS_Store?
-._*
+.LSOverride
 .Spotlight-V100
 .Trashes
+Network Trash Folder
+Temporary Items
+
+###################
+# Windows garbage #
+###################
+$RECYCLE.BIN/
 Desktop.ini
 ehthumbs.db
 Thumbs.db
+
+#################
+# Miscellaneous #
+#################
+.svn/
+__dev/
+__old/
+*.bak
