@@ -1,11 +1,12 @@
 --[[--------------------------------------------------------------------
 	LibRealmInfo
 	World of Warcraft library for obtaining information about realms.
-	by Phanx <addons@phanx.net>
+	Copyright 2014 Phanx <addons@phanx.net>
+	Do not distribute as a standalone addon.
+	See accompanying LICENSE and README files for more details.
 	https://github.com/Phanx/LibRealmInfo
 	http://wow.curseforge.com/addons/librealminfo
 	http://www.wowinterface.com/downloads/info22987-LibRealmInfo
-	This is free and unencumbered software released into the public domain.
 ----------------------------------------------------------------------]]
 
 local MAJOR, MINOR = "LibRealmInfo", 3

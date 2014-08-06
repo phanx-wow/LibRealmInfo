@@ -9,7 +9,8 @@
 
 ## Author: Phanx
 ## X-Email: addons@phanx.net
-## X-License: Public Domain. See LICENSE file for details.
+## X-Copyright: Copyright 2014 Phanx
+## X-License: No standalone redistribution. See LICENSE file for details.
 ## X-Website: https://github.com/Phanx/LibRealmInfo
 ## X-Curse-Project-ID: librealminfo
 ## X-WoWI-ID: 22987
