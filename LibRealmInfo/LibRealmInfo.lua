@@ -48,7 +48,7 @@ local function GetCurrentRegion()
 			_, _, _, _, realmID = BNGetToonInfo(BNGetInfo() or 1)
 		end
 		if realmID then
-			_, _, _, _, currentRegion = self:GetRealmInfo(realmID)
+			_, _, _, _, _, currentRegion = lib:GetRealmInfo(realmID)
 		end
 		if not currentRegion then
 			currentRegion = localeToRegion[GetLocale()]
@@ -63,6 +63,7 @@ end
 function lib:GetRealmInfoByName(searchName, searchRegion)
 	searchName = gsub(searchName, "%s", "")
 	searchRegion = searchRegion or GetCurrentRegion()
+	print("GetRealmInfoByName", searchName, searchRegion, GetCurrentRegion())
 
 	if Unpack then
 		Unpack()
@@ -1047,151 +1048,171 @@ data = {
 
 connections = {
 --{{ NORTH AMERICA
-"1136,83,109,129,1142",
-"1129,56,1291,1559", -- 102 to be added Aug 14
-"106,1576",
-"1137,84,1145",
-"1070,1563",
-"52,65",
-"1282,1264,78,1268",
-"1293,1075,80,1344,71",
-"1276,1267,156,1259",
-"1363,116",
-"1346,1138,107,1141,89,130",
-"1288,1294",
-"1165,1377",
-"75,1570",
-"1297,99",
-"1555,1067,101",
-"77,1128,79,103",
-"121,1143",
-"1549,160",
-"1190,13",
-"1280,1068,74",
-"54,1581",
-"1347,125",
-"1296,81,154,1266,1295",
-"1353,1147,1182,1359",
-"1564,105",
-"1558,70,1131",
-"64,1258",
-"119,112,111,1357,108",
-"1371,85",
-"117,1364",
-"91,95,1285",
-"1430,1432",
-"1361,122",
-"1556,1278,157,1286",
-"1351,87",
-"1434,1134",
-"1582,1173",
-"15,1277,155,1557",
-"1271,55",
-"115,1342",
-"114,1345",
-"1139,113",
-"1362,127,1148,1358,124,110",
-"1140,131",
-"1429,1433",
-"63,1270",
-"47,1354",
-"123,1349",
-"67,97",
-"96,1567",
-"93,92,82,159",
-"1565,62",
-"1370,12,1154", -- 94 to be added August 7
-"118,126",
-"128,8,1360",
-"7,1348",
-"1578,1069",
-"1287,153",
-"158,1292",
-"1579,68",
-"1149,1144",
-"53,1572",
-"1368,90",
-"14,104",
-"98,1262",
-"4,1355",
-"1071,1290,1260",
-"163,1289",
-"1132,1175",
-"1350,1151",
-"1374,86",
-"1367,1375,1184",
-"1372,1185",
-"1072,1283",
-"1352,164",
-"151,3",
---"72,157", -- "Future"
+"1136,83,109,129,1142", -- Aegwynn, Bonechewer, Daggerspine, Gurubashi, Hakkar
+"1129,56,1291,1559", -- Agamaggan, Archimonde, Jaedenar, The Underbog
+-- 14 Aug: add 102 Burning Legion
+"106,1576", -- Aggramar, Fizzcrank
+"1137,84,1145", -- Akama, Dragonmaw, Mug'thol
+"1070,1563", -- Alexstrasza, Terokkar
+"52,65", -- Alleria, Khadgar
+"1282,1264,78,1268", -- Altar of Storms, Anetheron, Magtheridon, Ysondre
+"1293,1075,80,1344,71", -- Alterac Mountains, Balnazzar, Gorgonnash, The Forgotten Coast, Warsong
+"1276,1267,156,1259", -- Andorhal, Scilla, Ursin, Zuluhed
+"1363,116", -- Antonidas, Uldum
+"1346,1138,107,1141,130", -- Anub'arak, Chromaggus, Crushridge, Garithos, Nathrezim, Smolderthorn
+"1288,1294", -- Anvilmar, Undermine
+"1165,1377", -- Arathor, Drenden
+"75,1570", -- Argent Dawn, The Scryers
+"1297,99", -- Arygos, Llane
+"1555,1067,101", -- Auchindoun, Cho'gall, Laughing Skull
+"77,1128,79,103", -- Azgalor, Azshara, Destromath, Thunderlord
+"121,1143", -- Azjol-Nerub, Khaz Modan
+"1549,160", -- Azuremyst, Staghelm
+"1190,13", -- Baelgun, Doomhammer
+"1280,1068,74", -- Black Dragonflight, Gul'dan, Skullcrusher
+"54,1581", -- Blackhand, Galakrond
+"1347,125", -- Blackwater Raiders, Shadow Council
+"1296,81,154,1266,1295", -- Blackwing Lair, Dethecus, Detheroc, Haomarush, Lethon
+"1353,1147", -- Bladefist, Kul Tiras
+"1564,105", -- Blade's Edge, Thunderhorn
+"1558,70,1131", -- Blood Furnace, Mannoroth, Nazjatar
+"64,1258", -- Bloodhoof, Duskwood
+"119,112,111,1357,108", -- Bloodscalp, Boulderfist, Dunemaul, Maiev, Stonemaul
+"1371,85", -- Borean Tundra, Shadowsong
+"117,1364", -- Bronzebeard, Shandris
+"91,95,1285", -- Burning Blade, Lightning's Blade, Onyxia
+"1430,1432", -- Caelestrasz, Nagrand
+"1361,122", -- Cairne, Perenolde
+-- 24 Aug: "88,1356", -- Cenarion Circle, Sisters of Elune
+"1556,1278,157,1286", -- Coilfang, Dalvengyr, Dark Iron, Demon Soul
+-- 14 Aug: add 72 Shattered Hand
+"1351,87", -- Darrowmere, Windrunner
+"1434,1134", -- Dath'Remar, Khaz'goroth
+"1582,1173", -- Dawnbringer, Madoran
+"15,1277,155,1557", -- Deathwing, Executus, Kalecgos, Shattered Halls
+"1271,55", -- Dentarg, Whisperwind
+"115,1342", -- Draenor, Echo Isles
+"114,1345", -- Dragonblight, Fenris
+"1139,113", -- Draka, Suramar
+"1362,127,1148,1358,124,110", -- Drak'Tharon, Firetree, Malorne, Rivendare, Spirestone, Stormscale
+"1140,131", -- Drak'thul, Skywall
+"1429,1433", -- Dreadmaul, Thaurissan
+"63,1270", -- Durotan, Ysera
+"58,1354", -- Eitrigg, Shu'halo
+"123,1349", -- Eldre'Thalas, Korialstrasz
+"67,97", -- Elune, Gilneas
+"96,1567", -- Eonar, Velen
+"93,92,82,159", -- Eredar, Gorefiend, Spinebreaker, Wildhammer
+"1565,62", -- Exodar, Medivh
+"1370,12,1154", -- Farstriders, Silver Hand, Thorium Brotherhood
+"118,126", -- Feathermoon, Scarlet Crusade
+"128,8,1360", -- Frostmane, Ner'zhul, Tortheldrin
+"7,1348", -- Frostwolf, Vashj
+"1578,1069", -- Ghostlands, Kael'thas
+"1287,153", -- Gnomeregan, Moonrunner
+"158,1292", -- Greymane, Tanaris
+"1579,68", -- Grizzly Hills, Lothar
+"1149,1144", -- Gundrak, Jubei'Thos
+"53,1572", -- Hellscream, Zangarmarsh
+"1368,90", -- Hydraxis, Terenas
+"14,104", -- Icecrown, Malygos
+"98,1262", -- Kargath, Norgannon
+"4,1355", -- Kilrogg, Winterhoof
+"1071,1290,1260", -- Kirin Tor, Sentinels, Steamwheedle Cartel
+"163,1289", -- Maelstrom, The Venture Co
+-- 21 Aug: add 1130 Lightninghoof
+"1132,1175", -- Malfurion, Trollbane
+"1350,1151", -- Misha, Rexxar
+"1374,86", -- Mok'Nathal, Silvermoon
+"1182,1359", -- Muradin, Nordrassil
+"1367,1375,1184", -- Nazgrel, Nesingwary, Vek'nilash
+"1372,1185", -- Quel'dorei, Sen'jin
+"1072,1283", -- Ravencrest, Uldaman
+"1352,164", -- Ravenholdt, Twisting Nether
+"151,3", -- Runetotem, Uther
 --}}
 --{{ EUROPE
-"1312,1081",
-"518,522,525,1091,646",
-"1413,1303",
-"500,619",
-"1093,607,1299,1083,526,621,1598,511,1090,1088",
-"562,1607",
-"1330,568",
-"1104,1611,587,1322",
-"512,642,643",
-"1334,541,1624,1622",
-"501,1587",
-"1404,602,1400",
-"578,1613,1318",
-"1406,569",
-"1597,529,1304",
-"503,623",
-"565,570",
-"521,515",
-"630,1392,1087,633,1596",
-"504,1080",
-"1924,1617",
-"1393,618",
-"523,1092,600,1408",
-"545,1336,533",
-"1395,1387,1384",
-"1127,1626",
-"644,1337,1086",
-"538,1621",
-"1321,1105",
-"1317,561",
-"631,606,624",
-"1389,1314",
-"614,1326,1121,1119",
-"527,1596,637",
-"1609,1616",
-"1084,1306",
-"531,1319,615,605",
-"507,1588",
-"528,638,558,559,629",
-"535,1328",
-"535,590,1320",
-"1123,1332",
-"540,645",
-"1385,1386",
-"509,544",
-"1401,574,1608",
-"567,1323",
-"1610,1603",
-"1927,1926",
-"1311,1589,547",
-"1388,1089",
-"1409,1106",
-"1324,1097",
-"517,1331",
-"1085,1595",
-"612,611,591,582",--Nefarian,Nera'thor,Mannoroth,Destromath(14.8.4)
-"575,1407",
-"1308,1096,1606,636",
-"1382,1383,1380,1379",
-"557,639",
-"552,1313",
---"641,1122",--Drek'Thar,Uldaman
---"1417,550",--Azuremyst,Stormrage
+-- Current:  http://eu.battle.net/wow/en/forum/topic/8715582685
+-- Upcoming: http://eu.battle.net/wow/en/forum/topic/9582578502
+-- MAYBE: "1312,1081", -- Aerie Peak, Bronzebeard
+"518,522,525,1091,646", -- Agamaggan, Bloodscalp, Crushridge, Emeriss, Hakkar
+"1413,1303", -- Aggra, Grim Batol
+"500,619", -- Aggramar, Hellscream
+"1093,607,1299,1083,526,621,1598,511,1090,1088", -- Ahn'Qiraj, Balnazzar, Boulderfist, Chromaggus, Daggerspine, Laughing Skull, Shattered Halls, Sunstrider, Talnivarr, Trollbane
+"562,1607", -- Alexstrasza, Nethersturm
+-- FUTURE: "563,1099", -- Alleria, Rexxar
+"1330,568", -- Ambossar, Kargath
+"1104,1611,587,1322", -- Anetheron, Festung der Stürme, Gul'dan, Rajaxx
+-- 13 Aug: add 594 Nathrezim
+"512,642,643", -- Arak-arahm, Rashgarroth, Throk'Feroth
+"1334,541,1624,1622", -- Arathi, Illidan, Naxxramas, Temple noir
+"501,1587", -- Arathor, Hellfire
+"1404,602,1400", -- Area 52, Sen'jin, Un'Goro
+"578,1613,1318", -- Arthas, Blutkessel, Vek'lor
+-- FUTURE: add 588 Kel'Thuzad
+-- MAYBE: add Wrathbringer
+"1406,569", -- Arygos, Khaz'goroth
+"502,548", -- Aszune, Shadowsong
+"1597,529,1304", -- Auchindoun, Dunemaul, Jaedenar
+"503,623", -- Azjol-Nerub, Quel'Thalas
+-- MAYBE: "579,616", -- Azshara, Krag'jin
+"565,570", -- Baelgun, Lothar
+"521,632,515", -- Bladefist, Frostwhisper, Zenedar
+"630,1392,1087,633,556", -- Bloodfeather, Burning Steppes, Executus, Kor'gall, Shattered Hand
+"504,1080", -- Bloodhoof, Khadgar
+"1924,1617", -- Booty Bay (RU), Deathweaver (RU)
+"1393,618", -- Bronze Dragonflight, Nordrassil
+"523,1092", -- Burning Blade, Drak'thul
+"545,1336,533", -- Cho'gall, Eldre'Thalas, Sinstralis
+"1395,1387,1384", -- Colinas Pardas, Los Errantes, Tyrande
+"1127,1626", -- Confrérie du Thorium, Les Clairvoyants
+-- FUTURE: add 647 Les Sentinelles
+"644,1337,1086", -- Conseil des Ombres, Culte de la Rive noire, La Croisade écarlate
+"538,1621", -- Dalaran, Marécage de Zangar
+"1321,1105", -- Dalvengyr, Nazjatar
+"1317,561", -- Darkmoon Faire, Earthen Ring
+"631,606,624", -- Darksorrow, Genjuros, Neptulon
+"1389,1314,1415", -- Darkspear, Saurfang, Terokkar
+"614,1326,1121,1119", -- Das Syndikat, Der abyssische Rat, Die Arguswacht, Die Todeskrallen
+"527,1596,637,627", -- Deathwing, Karazhan, Lightning's Blade, The Maelstrom
+"1609,1616", -- Deepholm (RU), Razuvious (RU)
+"1084,1306", -- Dentarg, Tarren Mill
+"582,591,612,611", -- Destromath, Mannoroth, Nefarian, Nera'thor
+-- MAYBE: add Gorgonnash
+"531,1319,615,605", -- Dethecus, Mug'thol, Terrordar, Theradras
+-- FUTURE: add 610 Onyxia
+-- MAYBE: "", -- Die ewige Wacht, Sie Silberne Hand
+-- MAYBE: "505,553", -- Doomhammer, Turalyon
+"507,1588", -- Dragonblight, Ghostlands
+"528,638,558,559,629", -- Dragonmaw, Haomarush, Spinebreaker, Stormreaver, Vashj
+"641,1122", -- Drek'Thar, Uldaman
+"600,1408", -- Dun Morogh, Norgannon
+"535,1328", -- Durotan, Tirion
+"1612,590,1320", -- Echsenkessel, Mal'Ganis, Taerar
+"1123,1332", -- Eitrigg, Krasus
+"540,645", -- Elune, Varimathras
+-- MAYBE: "508,551", -- Emerald Dream, Terenas
+"1385,1386", -- Exodar, Minahonda
+"509,544", -- Garona, Ner'zhul
+"1401,574,1608", -- Garrosh, Nozdormu, Shattrath
+"567,1323", -- Gilneas, Ulduar
+"1927,1926", -- Grom (RU), Thermaplugg (RU)
+"1311,1589,547", -- Kilrogg, Nagrand, Runetotem
+"1603,1610", -- Lich King (RU), Greymane (RU)
+"1388,1089", -- Lightbringer, Mazrigos
+"1409,1106", -- Lordaeron, Tichondrius
+"572,1098", -- Malfurion, Malygos
+"1324,1097", -- Malorne, Ysera
+"517,1331", -- Medivh, Suramar
+"1085,1595", -- Moonglade, The Sha'tar
+-- MAYBE: add 1117 Steamwheedle Cartel
+"575,1407", -- Perenolde, Teldrassil
+"1308,1096,1606,636", -- Ravenholdt, Scarshield Legion, Sporeggar, The Venture Co
+"1382,1383,1380,1379", -- Sanguino, Shen'dralar, Uldum, Zul'jin
+"557,639", -- Skullcrusher, Xavius
+"552,1313", -- Thunderhorn, Wildhammer
+-- MAYBE: "", -- Todeswache, Zirkel des Cenarius
 --}}
 }
-
 --_G.RealmInfo=data
 --_G.ConnectedRealms=connection
