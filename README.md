@@ -14,17 +14,17 @@ Usage
 
 #### GetRealmInfo
 
-`LibStub("LibRealmInfo"):GetRealmInfo(realmID)`
+`LibStub("LibRealmInfo"):GetRealmInfo(realmID)`  
 => name, apiName, rules, locale, battlegroup, region, timezone, connected, latinName
 
 #### GetRealmInfoByName
 
-`LibStub("LibRealmInfo"):GetRealmInfoByName(name, region)`
+`LibStub("LibRealmInfo"):GetRealmInfoByName(name, region)`  
 => realmID, name, apiName, rules, locale, battlegroup, region, timezone, connected, latinName
 
 #### GetRealmInfoByUnit
 
-`LibStub("LibRealmInfo"):GetRealmInfoByUnit(unit)`
+`LibStub("LibRealmInfo"):GetRealmInfoByUnit(unit)`  
 => realmID, name, apiName, rules, locale, battlegroup, region, timezone, connected, latinName
 
 See the [API documentation](https://github.com/Phanx/LibRealmInfo/wiki) on GitHub for more details!
@@ -41,4 +41,4 @@ If you have an active Korean account, please see [this forum post](http://www.wo
 License
 ----------
 
-Copyright (c) 2014 Phanx <<addons@phanx.net>>. See the accompanying LICENSE file for the terms under which this library is licensed. In particular, no standalone redistribution is permitted.
+Copyright (c) 2014 Phanx. See the accompanying LICENSE file for the terms under which this library is licensed. In particular, no standalone redistribution is permitted.
