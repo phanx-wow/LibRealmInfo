@@ -18,6 +18,14 @@ local standalone = (...) == MAJOR
 local data, connections
 local Unpack
 
+local function debug(...)
+	if standalone then
+		print("|cffff7f7f["..MAJOR.."]|r", ...)
+	end
+end
+
+------------------------------------------------------------------------
+
 function lib:GetRealmInfo(realmID)
 	realmID = tonumber(realmID)
 	if not realmID then return end
@@ -29,14 +37,15 @@ function lib:GetRealmInfo(realmID)
 	local info = data[realmID]
 	if info then
 		return info.name, info.apiName, info.rules, info.locale, info.battlegroup, info.region, info.timezone, info.connected, info.latinName
-	elseif standalone then
-		return print("|cffff7f7f["..MAJOR.."]|r No info found for realm", realmID)
 	end
+
+	debug("No info found for realm", realmID)
 end
 
 ------------------------------------------------------------------------
 
 local currentRegion
+local portalToRegion = { US = "US", EU = "EU", RU = "EU", KR = "KR", CN = "CN", TW = "TW" }
 local localeToRegion = { deDE = "EU", esES = "EU", esMX = "US", frFR = "EU", itIT = "EU", ruRU = "EU", koKR = "KR", enCN = "CN", zhCN = "CN", enTW = "TW", zhTW = "TW" }
 -- enGB client returns enUS, ptPT client returns ptBR, no way to tell what's what
 -- not actually sure if enCN and enTW return accurately
@@ -51,10 +60,15 @@ local function GetCurrentRegion()
 			_, _, _, _, _, currentRegion = lib:GetRealmInfo(realmID)
 		end
 		if not currentRegion then
-			currentRegion = localeToRegion[GetLocale()]
+			local portal = GetCVar("portal")
+			if portal then
+				currentRegion = portalToRegion[strupper(portal)]
+			else
+				currentRegion = localeToRegion[GetLocale()]
+			end
 		end
 		if not currentRegion then
-			return standalone and print("|cffff7f7f["..MAJOR.."]|r Could not determine current region") or nil
+			return debug("Could not determine current region.")
 		end
 	end
 	return currentRegion
@@ -63,7 +77,7 @@ end
 function lib:GetRealmInfoByName(searchName, searchRegion)
 	searchName = gsub(searchName, "%s", "")
 	searchRegion = searchRegion or GetCurrentRegion()
-	print("GetRealmInfoByName", searchName, searchRegion, GetCurrentRegion())
+	debug("GetRealmInfoByName", searchName, searchRegion, GetCurrentRegion())
 
 	if Unpack then
 		Unpack()
@@ -91,9 +105,7 @@ end
 ------------------------------------------------------------------------
 
 function Unpack()
-	if standalone then
-		print("|cffff7f7f["..MAJOR.."]|r Unpacking data...")
-	end
+	debug("Unpacking data...")
 
 	for id, info in pairs(data) do
 		local name, rules, locale, battlegroup, region, timezone = strsplit(",", info)
@@ -128,8 +140,37 @@ function Unpack()
 	Unpack = nil
 	collectgarbage()
 
-	if standalone then
-		print("|cffff7f7f["..MAJOR.."]|r Done unpacking data.")
+	debug("Done unpacking data.")
+
+	local auto = { GetAutoCompleteRealms() }
+	if #auto > 1 then
+		local id, _, _, _, _, _, _, _, connected = lib:GetRealmInfoByName(GetRealmName())
+		if not id then
+			return
+		end
+		if not connected then
+			print("|cffffff7fLibRealmInfo:|r Missing connected realm info for", id, GetRealmName())
+			return
+		end
+		for i = 1, #auto do
+			local name = auto[i]
+			auto[name] = true
+			auto[i] = nil
+		end
+		for i = 1, #connected do
+			local _, name = GetRealmInfo(connected[i])
+			if auto[name] then
+				auto[name] = nil
+			else
+				auto[name] = connected[i]
+			end
+		end
+		if next(auto) then
+			print("|cffffff7fLibRealmInfo:|r Incomplete connected realm info for", id, GetRealmName())
+			for name, id in pairs(auto) do
+				print(name, id == true and "MISSING" or "INCORRECT")
+			end
+		end
 	end
 end
 
@@ -1050,7 +1091,7 @@ connections = {
 --{{ NORTH AMERICA
 "1136,83,109,129,1142", -- Aegwynn, Bonechewer, Daggerspine, Gurubashi, Hakkar
 "1129,56,1291,1559", -- Agamaggan, Archimonde, Jaedenar, The Underbog
--- 14 Aug: add 102 Burning Legion
+-- FUTURE: add 102 Burning Legion
 "106,1576", -- Aggramar, Fizzcrank
 "1137,84,1145", -- Akama, Dragonmaw, Mug'thol
 "1070,1563", -- Alexstrasza, Terokkar
@@ -1083,9 +1124,8 @@ connections = {
 "91,95,1285", -- Burning Blade, Lightning's Blade, Onyxia
 "1430,1432", -- Caelestrasz, Nagrand
 "1361,122", -- Cairne, Perenolde
--- 24 Aug: "88,1356", -- Cenarion Circle, Sisters of Elune
-"1556,1278,157,1286", -- Coilfang, Dalvengyr, Dark Iron, Demon Soul
--- 14 Aug: add 72 Shattered Hand
+"88,1356", -- Cenarion Circle, Sisters of Elune (21 Aug 2014)
+"1556,1278,157,1286,72", -- Coilfang, Dalvengyr, Dark Iron, Demon Soul, Shattered Hand (21 Aug 2014)
 "1351,87", -- Darrowmere, Windrunner
 "1434,1134", -- Dath'Remar, Khaz'goroth
 "1582,1173", -- Dawnbringer, Madoran
@@ -1119,8 +1159,7 @@ connections = {
 "98,1262", -- Kargath, Norgannon
 "4,1355", -- Kilrogg, Winterhoof
 "1071,1290,1260", -- Kirin Tor, Sentinels, Steamwheedle Cartel
-"163,1289", -- Maelstrom, The Venture Co
--- 21 Aug: add 1130 Lightninghoof
+"1130,163,1289", -- Lightninghoof (21 Aug 2014), Maelstrom, The Venture Co
 "1132,1175", -- Malfurion, Trollbane
 "1350,1151", -- Misha, Rexxar
 "1374,86", -- Mok'Nathal, Silvermoon
@@ -1134,42 +1173,44 @@ connections = {
 --{{ EUROPE
 -- Current:  http://eu.battle.net/wow/en/forum/topic/8715582685
 -- Upcoming: http://eu.battle.net/wow/en/forum/topic/9582578502
--- MAYBE: "1312,1081", -- Aerie Peak, Bronzebeard
+-- 17 Sep: "1312,1081", -- Aerie Peak, Bronzebeard
 "518,522,525,1091,646", -- Agamaggan, Bloodscalp, Crushridge, Emeriss, Hakkar
+-- FUTURE: Add Twilight's Hammer
 "1413,1303", -- Aggra, Grim Batol
 "500,619", -- Aggramar, Hellscream
 "1093,607,1299,1083,526,621,1598,511,1090,1088", -- Ahn'Qiraj, Balnazzar, Boulderfist, Chromaggus, Daggerspine, Laughing Skull, Shattered Halls, Sunstrider, Talnivarr, Trollbane
 "562,1607", -- Alexstrasza, Nethersturm
--- FUTURE: "563,1099", -- Alleria, Rexxar
+"563,1099", -- Alleria, Rexxar
+-- FUTURE: Alonsus, Kul Tiras
+-- FUTURE: add Anachronos
 "1330,568", -- Ambossar, Kargath
-"1104,1611,587,1322", -- Anetheron, Festung der Stürme, Gul'dan, Rajaxx
--- 13 Aug: add 594 Nathrezim
+"1104,1611,587,589,594,1322", -- Anetheron, Festung der Stürme, Gul'dan, Kil'jaeden, Nathrezim, Rajaxx
 "512,642,643", -- Arak-arahm, Rashgarroth, Throk'Feroth
+-- FUTURE: add Kael'Thas
 "1334,541,1624,1622", -- Arathi, Illidan, Naxxramas, Temple noir
 "501,1587", -- Arathor, Hellfire
 "1404,602,1400", -- Area 52, Sen'jin, Un'Goro
-"578,1613,1318", -- Arthas, Blutkessel, Vek'lor
--- FUTURE: add 588 Kel'Thuzad
--- MAYBE: add Wrathbringer
+"578,1613,588,1318,609", -- Arthas, Blutkessel, Kel'Thuzad, Vek'lor, Wrathbringer
 "1406,569", -- Arygos, Khaz'goroth
 "502,548", -- Aszune, Shadowsong
 "1597,529,1304", -- Auchindoun, Dunemaul, Jaedenar
 "503,623", -- Azjol-Nerub, Quel'Thalas
--- MAYBE: "579,616", -- Azshara, Krag'jin
+"579,616", -- Azshara, Krag'jin
 "565,570", -- Baelgun, Lothar
 "521,632,515", -- Bladefist, Frostwhisper, Zenedar
+"1416,1298", -- Blade's Edge, Vek'nilash
 "630,1392,1087,633,556", -- Bloodfeather, Burning Steppes, Executus, Kor'gall, Shattered Hand
 "504,1080", -- Bloodhoof, Khadgar
 "1924,1617", -- Booty Bay (RU), Deathweaver (RU)
 "1393,618", -- Bronze Dragonflight, Nordrassil
 "523,1092", -- Burning Blade, Drak'thul
+-- FUTURE: Chants éternels, Vol'jin
 "545,1336,533", -- Cho'gall, Eldre'Thalas, Sinstralis
 "1395,1387,1384", -- Colinas Pardas, Los Errantes, Tyrande
-"1127,1626", -- Confrérie du Thorium, Les Clairvoyants
--- FUTURE: add 647 Les Sentinelles
+"1127,1626,647", -- Confrérie du Thorium, Les Clairvoyants, Les Sentinelles
 "644,1337,1086", -- Conseil des Ombres, Culte de la Rive noire, La Croisade écarlate
 "538,1621", -- Dalaran, Marécage de Zangar
-"1321,1105", -- Dalvengyr, Nazjatar
+"1321,584,1105,573", -- Dalvengyr, Frostmourne, Nazjatar, Zuluhed
 "1317,561", -- Darkmoon Faire, Earthen Ring
 "631,606,624", -- Darksorrow, Genjuros, Neptulon
 "1389,1314,1415", -- Darkspear, Saurfang, Terokkar
@@ -1177,11 +1218,9 @@ connections = {
 "527,1596,637,627", -- Deathwing, Karazhan, Lightning's Blade, The Maelstrom
 "1609,1616", -- Deepholm (RU), Razuvious (RU)
 "1084,1306", -- Dentarg, Tarren Mill
-"582,591,612,611", -- Destromath, Mannoroth, Nefarian, Nera'thor
--- MAYBE: add Gorgonnash
-"531,1319,615,605", -- Dethecus, Mug'thol, Terrordar, Theradras
--- FUTURE: add 610 Onyxia
--- MAYBE: "", -- Die ewige Wacht, Sie Silberne Hand
+"582,586,591,612,611", -- Destromath, Gorgonnash, Mannoroth, Nefarian, Nera'thor
+"531,1319,610,615,605", -- Dethecus, Mug'thol, Onyxia, Terrordar, Theradras
+"1118,576", -- Die ewige Wacht, Die Silberne Hand
 -- MAYBE: "505,553", -- Doomhammer, Turalyon
 "507,1588", -- Dragonblight, Ghostlands
 "528,638,558,559,629", -- Dragonmaw, Haomarush, Spinebreaker, Stormreaver, Vashj
@@ -1191,9 +1230,10 @@ connections = {
 "1612,590,1320", -- Echsenkessel, Mal'Ganis, Taerar
 "1123,1332", -- Eitrigg, Krasus
 "540,645", -- Elune, Varimathras
--- MAYBE: "508,551", -- Emerald Dream, Terenas
+-- FUTURE: "508,551", -- Emerald Dream, Terenas
 "1385,1386", -- Exodar, Minahonda
 "509,544", -- Garona, Ner'zhul
+-- FUTURE: add ,546, Sargeras
 "1401,574,1608", -- Garrosh, Nozdormu, Shattrath
 "567,1323", -- Gilneas, Ulduar
 "1927,1926", -- Grom (RU), Thermaplugg (RU)
@@ -1205,14 +1245,15 @@ connections = {
 "1324,1097", -- Malorne, Ysera
 "517,1331", -- Medivh, Suramar
 "1085,1595", -- Moonglade, The Sha'tar
--- MAYBE: add 1117 Steamwheedle Cartel
+-- FUTURE: add 1117 Steamwheedle Cartel
 "575,1407", -- Perenolde, Teldrassil
-"1308,1096,1606,636", -- Ravenholdt, Scarshield Legion, Sporeggar, The Venture Co
+"635,1308,1096,1606,636", -- Defias Brotherhood, Ravenholdt, Scarshield Legion, Sporeggar, The Venture Co
 "1382,1383,1380,1379", -- Sanguino, Shen'dralar, Uldum, Zul'jin
 "557,639", -- Skullcrusher, Xavius
+-- FUTURE: Add Al'Akir
 "552,1313", -- Thunderhorn, Wildhammer
--- MAYBE: "", -- Todeswache, Zirkel des Cenarius
+"1405,592", -- Todeswache, Zirkel des Cenarius
 --}}
 }
---_G.RealmInfo=data
---_G.ConnectedRealms=connection
+--_G.LRI_RealmInfo=data
+--_G.LRI_ConnectedRealms=connection
