@@ -1,5 +1,5 @@
 ## Interface: 50400
-## Version: 5
+## Version: 6
 
 ## Title: Lib: Realm Info
 ## Notes: Library to provide information about realms.
