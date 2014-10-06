@@ -1177,13 +1177,12 @@ connections = {
 
 -- ENGLISH
 "1312,1081", -- Aerie Peak / Bronzebeard
-"518,522,525,1091,646", -- Agamaggan / Bloodscalp / Crushridge / Emeriss / Hakkar
--- SEP 30: add 513 Twilight's Hammer
+"518,522,525,1091,646,513", -- Agamaggan / Bloodscalp / Crushridge / Emeriss / Hakkar / Twilight's Hammer
 "1413,1303", -- Aggra / Grim Batol
 "500,619", -- Aggramar / Hellscream
 "1093,607,1299,1083,526,621,1598,511,1090,1088", -- Ahn'Qiraj / Balnazzar / Boulderfist / Chromaggus / Daggerspine / Laughing Skull / Shattered Halls / Sunstrider / Talnivarr / Trollbane
-"1391,1082", -- Alonsus / Kul Tiras
--- SEP 30: add 1394 Anachronos
+"519,557,639", -- Al'Akir / Skullcrusher / Xavius
+"1391,1394,1082", -- Alonsus / Anachronos / Kul Tiras
 "501,1587", -- Arathor / Hellfire
 "502,548", -- Aszune / Shadowsong
 "1597,529,1304", -- Auchindoun / Dunemaul / Jaedenar
@@ -1191,7 +1190,7 @@ connections = {
 "1417,550", -- Azuremyst / Stormrage
 "521,632,515", -- Bladefist / Frostwhisper / Zenedar
 "1416,1298", -- Blade's Edge / Vek'nilash
--- FUTURE: add 1310 Eonar
+-- OCT 8: add 1310 Eonar
 "630,1392,1087,633,556", -- Bloodfeather / Burning Steppes / Executus / Kor'gall / Shattered Hand
 "504,1080", -- Bloodhoof / Khadgar
 "1393,618", -- Bronze Dragonflight / Nordrassil
@@ -1205,13 +1204,11 @@ connections = {
 "505,553", -- Doomhammer / Turalyon
 "507,1588", -- Dragonblight / Ghostlands
 "528,638,558,559,629", -- Dragonmaw / Haomarush / Spinebreaker / Stormreaver / Vashj
--- SEP 30: "508,551", -- Emerald Dream / Terenas
+"508,551", -- Emerald Dream / Terenas
 "1311,1589,547", -- Kilrogg / Nagrand / Runetotem
 "1388,1089", -- Lightbringer / Mazrigos
 "1085,1595", -- Moonglade / The Sha'tar
--- FUTURE: add 1117 Steamwheedle Cartel
-"557,639", -- Skullcrusher / Xavius
--- SEP 30: add 519 Al'Akir
+-- OCT 8: add 1117 Steamwheedle Cartel
 "552,1313", -- Thunderhorn / Wildhammer
 
 -- FRENCH
@@ -1243,7 +1240,7 @@ connections = {
 "582,586,591,612,611", -- Destromath / Gorgonnash / Mannoroth / Nefarian / Nera'thor
 "531,1319,610,615,605", -- Dethecus / Mug'thol / Onyxia / Terrordar / Theradras
 "614,1326,1121,1119,613", -- Das Syndikat / Der abyssische Rat / Die Arguswacht / Die Todeskrallen / Kult der Verdammten
--- FUTURE: add 1619 Das Konsortium
+-- OCT 8: add 1619 Das Konsortium
 "1118,576", -- Die ewige Wacht / Die Silberne Hand
 "1333,516", -- Die Nachtwache / Forscherliga
 "535,1328", -- Durotan / Tirion
