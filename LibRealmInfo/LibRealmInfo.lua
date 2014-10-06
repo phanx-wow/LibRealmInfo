@@ -1089,9 +1089,9 @@ data = {
 
 connections = {
 --{{ NORTH AMERICA
+-- http://us.battle.net/wow/en/blog/11393305
 "1136,83,109,129,1142", -- Aegwynn, Bonechewer, Daggerspine, Gurubashi, Hakkar
 "1129,56,1291,1559", -- Agamaggan, Archimonde, Jaedenar, The Underbog
--- FUTURE: add 102 Burning Legion
 "106,1576", -- Aggramar, Fizzcrank
 "1137,84,1145", -- Akama, Dragonmaw, Mug'thol
 "1070,1563", -- Alexstrasza, Terokkar
