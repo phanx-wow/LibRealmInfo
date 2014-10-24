@@ -3,8 +3,9 @@
 
 World of Warcraft library to provide information about realms.
 
-* **Download:** [Curse](http://wow.curseforge.com/addons/librealminfo)
-* **Download:** [WoWInterface](http://www.wowinterface.com/downloads/info22987-LibRealmInfo.html)
+If you only need to know the names of realms connected to the player's current realm, you can just use [GetAutoCompleteRealms](http://wowpedia.org/API_GetAutoCompleteRealms) instead of this library. If you only need to know which region the player is currently on, use [GetCurrentRegion](http://wowpedia.org/API_GetCurrentRegion].
+
+* **Download:** [Curse](http://wow.curseforge.com/addons/librealminfo) or [WoWInterface](http://www.wowinterface.com/downloads/info22987-LibRealmInfo.html)
 * **Source & Issues:** [GitHub](https://github.com/Phanx/LibRealmInfo)
 * **API Documentation:** [GitHub Wiki](https://github.com/Phanx/LibRealmInfo/wiki)
 
@@ -12,33 +13,42 @@ World of Warcraft library to provide information about realms.
 Usage
 --------
 
-#### GetRealmInfo
+Available API methods:
 
-`LibStub("LibRealmInfo"):GetRealmInfo(realmID)`  
-=> name, apiName, rules, locale, battlegroup, region, timezone, connected, latinName
+* `:GetRealmInfo(name[, region])` - Get information about a realm by name; if no region is provided, the player's current region will be assumed.
+* `:GetRealmInfoByID(id)` - Get information about a realm by ID.
+* `:GetRealmInfoByGUID(guid)` - Get information about the realm the given player GUID belongs to.
+* `:GetRealmInfoByUnit(unit)` - Get information about the realm the given player unit belongs to.
 
-#### GetRealmInfoByName
+All of the above methods return the following values:
 
-`LibStub("LibRealmInfo"):GetRealmInfoByName(name, region)`  
-=> realmID, name, apiName, rules, locale, battlegroup, region, timezone, connected, latinName
+1. `id` - the numeric unique ID of the realm
+2. `name` - the name of the realm
+3. `api_name` - the name of the realm without spaces, as seen in chat etc.
+4. `rules` - one of "PVP", "PVE", "RP" or "RPPVP"
+5. `locale` - the official language of the realm
+6. `battlegroup` - the name of the realm's battlegroup
+7. `region` - one of "US", "EU", "KR", "CN" or "TW"
+8. `timezone` - for realms in the US region, a string describing the realm's time zone, eg. "PST" or "AEST"
+9. `connections` - for connected realms, a table listing the IDs of connected realms
+10. `latin_name` - for Russian-language realms, the English name of the realm
 
-#### GetRealmInfoByUnit
-
-`LibStub("LibRealmInfo"):GetRealmInfoByUnit(unit)`  
-=> realmID, name, apiName, rules, locale, battlegroup, region, timezone, connected, latinName
-
-See the [API documentation](https://github.com/Phanx/LibRealmInfo/wiki) on GitHub for more details!
+Note that the realm IDs contained in the GUIDs of player characters on connected realms indicate the realm hosting the connected realm group, which may not be the realm that character actually belongs to. Use [GetPlayerInfoByGUID](http://wowpedia.org/API_GetPlayerInfoByGUID) to get the real realm name, or use the :GetRealmInfoByGUID or :GetRealmInfoByUnit methods provided by LibRealmInfo.
 
 
 To Do
 --------
 
-#### Data for Korean realms?
+#### Data for Korean realms
 
-If you have an active Korean account, please see [this forum post](http://www.wowinterface.com/forums/showthread.php?p=294425#post294425). If you don't know how to run the script provided there, you can just post the whole HTML source of the relevant page (right-click > view source > save, then attach the file to your post).
+If you have an active Korean account, please log into the Battle.net website, go to the Paid Character Transfer page, select a character, save the HTML source of the page (right-click, view source, save) and attach it to a ticket.
+
+#### Connection data for Chinese and Taiwanese realms
+
+If you can read Chinese, please locate the blog or forum post where Blizzard lists the connected realms for one or both of these regions and link to it in a ticket.
 
 
 License
 ----------
 
-Copyright (c) 2014 Phanx. See the accompanying LICENSE file for the terms under which this library is licensed. In particular, no standalone redistribution is permitted.
+Copyright (c) 2014 Phanx. See the accompanying LICENSE file for the terms under which this library is licensed. In particular, you may embed the library in addons that make use of it, but you may not upload the library by itself to other websites.
