@@ -1,5 +1,5 @@
 ## Interface: 60000
-## Version: 9
+## Version: Beta 10
 
 ## Title: Lib: Realm Info
 ## Notes: Library to provide information about realms.

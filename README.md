@@ -3,11 +3,12 @@
 
 World of Warcraft library to provide information about realms.
 
-If you only need to know the names of realms connected to the player's current realm, you can just use [GetAutoCompleteRealms](http://wowpedia.org/API_GetAutoCompleteRealms) instead of this library. If you only need to know which region the player is currently on, use [GetCurrentRegion](http://wowpedia.org/API_GetCurrentRegion].
+If you only need to know the names of realms connected to the player's current realm, you should just use [GetAutoCompleteRealms](http://wowpedia.org/API_GetAutoCompleteRealms) instead of this library.
+
+If you only need to know which region the player is currently on, you can use [GetCurrentRegion](http://wowpedia.org/API_GetCurrentRegion), but you should be aware that this function is not always reliable.
 
 * **Download:** [Curse](http://wow.curseforge.com/addons/librealminfo) or [WoWInterface](http://www.wowinterface.com/downloads/info22987-LibRealmInfo.html)
-* **Source & Issues:** [GitHub](https://github.com/Phanx/LibRealmInfo)
-* **API Documentation:** [GitHub Wiki](https://github.com/Phanx/LibRealmInfo/wiki)
+* **Source, Issues, and Documentation:** [GitHub](https://github.com/Phanx/LibRealmInfo)
 
 
 Usage
@@ -15,6 +16,7 @@ Usage
 
 Available API methods:
 
+* `:GetCurrentRegion()` - Get the two-letter abbrevation for the region the player is currently connected to; one of US, EU, KR, TW, or CN. Returns nil on PTR and Beta realms.
 * `:GetRealmInfo(name[, region])` - Get information about a realm by name; if no region is provided, the player's current region will be assumed.
 * `:GetRealmInfoByID(id)` - Get information about a realm by ID.
 * `:GetRealmInfoByGUID(guid)` - Get information about the realm the given player GUID belongs to.
@@ -32,6 +34,7 @@ All of the above methods return the following values:
 8. `timezone` - for realms in the US region, a string describing the realm's time zone, eg. "PST" or "AEST"
 9. `connections` - for connected realms, a table listing the IDs of connected realms
 10. `latin_name` - for Russian-language realms, the English name of the realm
+10. `latin_api_name` - for Russian-language realms, the English name of the realm without spaces
 
 Note that the realm IDs contained in the GUIDs of player characters on connected realms indicate the realm hosting the connected realm group, which may not be the realm that character actually belongs to. Use [GetPlayerInfoByGUID](http://wowpedia.org/API_GetPlayerInfoByGUID) to get the real realm name, or use the :GetRealmInfoByGUID or :GetRealmInfoByUnit methods provided by LibRealmInfo.
 
