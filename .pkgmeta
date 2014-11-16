@@ -1,5 +1,8 @@
 package-as: LibRealmInfo
 
+ignore:
+   - README.md
+
 enable-nolib-creation: no
 
 externals:
