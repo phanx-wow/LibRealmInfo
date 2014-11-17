@@ -49,9 +49,3 @@ If you have an active Korean account, please log into the Battle.net website, go
 #### Connection data for Chinese and Taiwanese realms
 
 If you can read Chinese, please locate the blog or forum post where Blizzard lists the connected realms for one or both of these regions and link to it in a ticket.
-
-
-License
-----------
-
-Copyright (c) 2014 Phanx. See the accompanying LICENSE file for the terms under which this library is licensed. In particular, you may embed the library in addons that make use of it, but you may not upload the library by itself to other websites.
