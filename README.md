@@ -1,7 +1,7 @@
 ﻿LibRealmInfo
 ===============
 
-World of Warcraft library to provide information about realms.
+Library to provide information about realms.
 
 If you only need to know the names of realms connected to the player's current realm, you should just use [GetAutoCompleteRealms](http://wowpedia.org/API_GetAutoCompleteRealms) instead of this library.
 
@@ -9,6 +9,16 @@ If you only need to know which region the player is currently on, you can use [G
 
 * **Download:** [Curse](http://wow.curseforge.com/addons/librealminfo) or [WoWInterface](http://www.wowinterface.com/downloads/info22987-LibRealmInfo.html)
 * **Source, Issues, and Documentation:** [GitHub](https://github.com/Phanx/LibRealmInfo)
+
+
+Embedding
+------------
+
+If you are the CurseForge/WowAce packager, you should use the following URL in your .pkgmeta file:
+
+    svn://svn.wowinterface.com/LibRealmInfo-1100/trunk/LibRealmInfo-1.0
+
+If you use a Git URL instead, you will get a number of irrelevant documentation and metadata files, and an extra layer of folders, since Git does not support checking out only part of the repository, and the Curse packager does not support checking out from GitHub over SVN. You're welcome to add `librealminfo` to the `tools-used` section of your .pkgmeta file so I get Curse points for the library usage, but it's not required.
 
 
 Usage
