@@ -1,5 +1,5 @@
 ## Interface: 60000
-## Version: 9
+## Version: @project-version@
 
 ## Title: Lib: Realm Info
 ## Notes: Library to provide information about realms.
@@ -10,12 +10,9 @@
 ## Author: Phanx
 ## X-Email: addons@phanx.net
 ## X-Copyright: Copyright (c) 2014 Phanx. All rights reserved.
-## X-License: See accompanying LICENSE file for details.
 ## X-Website: https://github.com/Phanx/LibRealmInfo
-## X-Curse-Project-ID: librealminfo
-## X-WoWI-ID: 22987
 
 ## OptionalDeps: LibStub
 LibStub\LibStub.lua
 
-LibRealmInfo\LibRealmInfo.lua
+LibRealmInfo.lua

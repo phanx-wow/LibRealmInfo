@@ -11,16 +11,6 @@ If you only need to know which region the player is currently on, you can use [G
 * **Source, Issues, and Documentation:** [GitHub](https://github.com/Phanx/LibRealmInfo)
 
 
-Embedding
-------------
-
-If you are the CurseForge/WowAce packager, you should use the following URL in your .pkgmeta file:
-
-    svn://svn.wowinterface.com/LibRealmInfo-1100/trunk/LibRealmInfo-1.0
-
-If you use a Git URL instead, you will get a number of irrelevant documentation and metadata files, and an extra layer of folders, since Git does not support checking out only part of the repository, and the Curse packager does not support checking out from GitHub over SVN. You're welcome to add `librealminfo` to the `tools-used` section of your .pkgmeta file so I get Curse points for the library usage, but it's not required.
-
-
 Usage
 --------
 
@@ -59,3 +49,10 @@ If you have an active Korean account, please log into the Battle.net website, go
 #### Connection data for Chinese and Taiwanese realms
 
 If you can read Chinese, please locate the blog or forum post where Blizzard lists the connected realms for one or both of these regions and link to it in a ticket.
+
+
+
+License
+----------
+
+LibRealmInfo is free to download and use, and its source code is freely viewable, but it is not "free software" or "open source". You may include a copy of it in other addons that make use of it as an embedded library, but you may not upload it by itself to other websites, and you may not make changes to it. If you feel something should be changed, please submit a patch!
