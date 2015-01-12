@@ -12,6 +12,7 @@
 ## X-Copyright: Copyright (c) 2014 Phanx. All rights reserved.
 ## X-Website: https://github.com/Phanx/LibRealmInfo
 
+## LoadOnDemand: 1
 ## OptionalDeps: LibStub
 LibStub\LibStub.lua
 
