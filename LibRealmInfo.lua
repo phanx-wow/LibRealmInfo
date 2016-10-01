@@ -144,14 +144,14 @@ function Unpack()
 			realmData[id] = {
 				id = id,
 				name = name,
-				api_name = (gsub(name, "%s", "")),
+				api_name = (gsub(name, "[%s%-]", "")),
 				rules = rules,
 				locale = locale,
 				battlegroup = battlegroup,
 				region = region,
 				timezone = timezone, -- only for US region realms
 				latin_name = latin_name, -- only for ruRU language realms
-				latin_api_name = latin_name and (gsub(latin_name, "%s", "")) or nil, -- only for ruRU language realms
+				latin_api_name = latin_name and (gsub(latin_name, "[%s%-]", "")) or nil, -- only for ruRU language realms
 			}
 		end
 	end
