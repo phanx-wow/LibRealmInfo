@@ -1,4 +1,4 @@
-## Interface: 60000
+## Interface: 70200
 ## Version: @project-version@
 
 ## Title: Lib: Realm Info
@@ -9,8 +9,10 @@
 
 ## Author: Phanx
 ## X-Email: addons@phanx.net
-## X-Copyright: Copyright (c) 2014 Phanx. All rights reserved.
-## X-Website: https://github.com/Phanx/LibRealmInfo
+## X-Copyright: Copyright (c) 2014-2017 Phanx. All rights reserved.
+## X-Website: https://github.com/phanx-wow/LibRealmInfo
+## X-Curse-Project-ID: 83224
+## X-WoWI-ID: 22987
 
 ## LoadOnDemand: 1
 ## OptionalDeps: LibStub
