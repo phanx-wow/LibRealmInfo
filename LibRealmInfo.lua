@@ -52,15 +52,18 @@ end
 
 ------------------------------------------------------------------------
 
-local validRegions = { US = true, EU = true, CN = true, TW = true } -- missing KR data :(
+local validRegions = { US = true, EU = true, CN = true, KR = true, TW = true }
 
 function lib:GetRealmInfo(name, region)
 	debug("GetRealmInfo", name, region)
-	if type(name) == "number" or strmatch(name, "^%d+$") then
+	local isString = type(name) == "string"
+	if isString then
+		name = strtrim(name)
+	end
+	if type(name) == "number" or isString and strmatch(name, "^%d+$") then
 		return self:GetRealmInfoByID(name)
 	end
-	name = type(name) == "string" and strtrim(name) or ""
-	assert(strlen(name) > 0, "Usage: GetRealmInfo(name[, region])")
+	assert(isString and strlen(name) > 0, "Usage: GetRealmInfo(name[, region])")
 
 	if not region or not validRegions[region] then
 		region = self:GetCurrentRegion()
@@ -800,7 +803,7 @@ realmData = {
 	[2116] = "줄진,PVP,koKR,징벌의 전장,KR",
 	[2107] = "하이잘,PVP,koKR,격노의 전장,KR",
 	[293]  = "헬스크림,PVP,koKR,격노의 전장,KR",
-}}
+--}}
 --{{ China
 	[925]  = "万色星辰,PVE,zhCN,Battle Group 9,CN",
 	[922]  = "世界之树,PVE,zhCN,Battle Group 9,CN",
