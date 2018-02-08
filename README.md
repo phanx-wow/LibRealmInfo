@@ -7,8 +7,11 @@ If you only need to know the names of realms connected to the player's current r
 
 If you only need to know which region the player is currently on, you can use [GetCurrentRegion](http://wowpedia.org/API_GetCurrentRegion), but you should be aware that this function is not always reliable.
 
-* **Download:** [Curse](http://wow.curseforge.com/addons/librealminfo) or [WoWInterface](http://www.wowinterface.com/downloads/info22987-LibRealmInfo.html)
-* **Source, Issues, and Documentation:** [GitHub](https://github.com/phanx-wow/LibRealmInfo)
+* [Download on Curse](https://wow.curseforge.com/projects/librealminfo)
+* [Download on WoWInterface](https://www.wowinterface.com/downloads/info22987-LibRealmInfo.html)
+* [Source Code](https://github.com/phanx-wow/LibRealmInfo)
+* [Issue Tracker](https://github.com/phanx-wow/LibRealmInfo/issues)
+* [Documentation](https://github.com/phanx-wow/LibRealmInfo/wiki)
 
 
 Usage
