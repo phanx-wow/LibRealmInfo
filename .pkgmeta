@@ -6,4 +6,6 @@ ignore:
 enable-nolib-creation: no
 
 externals:
-   LibStub: svn://svn.wowace.com/wow/libstub/mainline/tags/1.0
+   LibStub:
+      url: https://repos.wowace.com/wow/libstub/trunk
+      tag: 1.0
