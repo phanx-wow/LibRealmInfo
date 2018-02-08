@@ -8,7 +8,7 @@
 	https://www.wowinterface.com/downloads/info22987-LibRealmInfo
 ----------------------------------------------------------------------]]
 
-local MAJOR, MINOR = "LibRealmInfo", 10
+local MAJOR, MINOR = "LibRealmInfo", 12
 assert(LibStub, MAJOR.." requires LibStub")
 local lib, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
@@ -497,7 +497,7 @@ realmData = {
 	[562]  = "Alexstrasza,PVE,deDE,Sturmangriff / Charge,EU",
 	[563]  = "Alleria,PVE,deDE,Reckoning / Abrechnung,EU",
 	[1391] = "Alonsus,PVE,enGB,Reckoning / Abrechnung,EU",
-	[601]  = "Aman'Thul,PVE,deDE,Reckoning / Abrechnung,EU",
+	[601]  = "Aman'thul,PVE,deDE,Reckoning / Abrechnung,EU",
 	[1330] = "Ambossar,PVE,deDE,Reckoning / Abrechnung,EU",
 	[1394] = "Anachronos,PVE,enGB,Reckoning / Abrechnung,EU",
 	[1104] = "Anetheron,PVP,deDE,Glutsturm / Emberstorm,EU",
