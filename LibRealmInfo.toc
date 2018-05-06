@@ -14,7 +14,6 @@
 ## X-Curse-Project-ID: 83224
 ## X-WoWI-ID: 22987
 
-## LoadOnDemand: 1
 ## OptionalDeps: LibStub
 LibStub\LibStub.lua
 
