@@ -163,11 +163,21 @@ function Unpack()
 	end
 
 	for i = 1, #connectionData do
-		local connections = { strsplit(",", connectionData[i]) }
-		for j = 1, #connections do
-			local id = tonumber(connections[j])
-			connections[j] = id
-			realmData[id].connections = connections
+		local connectedRealms = { strsplit(",", connectionData[i]) }
+		local connectionID = tonumber(table.remove(connectedRealms, 1))
+		local region = table.remove(connectedRealms, 1)
+
+		for j = 1, #connectedRealms do
+			local realmID = tonumber(connectedRealms[j])
+			connectedRealms[j] = realmID
+			realmData[realmID].connections = connectedRealms
+		end
+
+		if not realmData[connectionID] then
+			-- nameless server used to host connected realms
+			realmData[connectionID] = {
+				region = region
+			}
 		end
 	end
 
@@ -1184,222 +1194,274 @@ realmData = {
 ------------------------------------------------------------------------
 
 connectionData = {
---{{ North America
-	-- http://us.battle.net/wow/en/blog/11393305
-	"1136,83,109,129,1142", -- Aegwynn, Bonechewer, Daggerspine, Gurubashi, Hakkar
-	"1129,56,1291,1559", -- Agamaggan, Archimonde, Jaedenar, The Underbog
-	"106,1576", -- Aggramar, Fizzcrank
-	"1137,84,1145", -- Akama, Dragonmaw, Mug'thol
-	"1070,1563", -- Alexstrasza, Terokkar
-	"52,65", -- Alleria, Khadgar
-	"1282,1264,78,1268", -- Altar of Storms, Anetheron, Magtheridon, Ysondre
-	"1293,1075,80,1344,71", -- Alterac Mountains, Balnazzar, Gorgonnash, The Forgotten Coast, Warsong
-	"1276,1267,156,1259", -- Andorhal, Scilla, Ursin, Zuluhed
-	"1363,116", -- Antonidas, Uldum
-	"1346,1138,107,1141,130", -- Anub'arak, Chromaggus, Crushridge, Garithos, Nathrezim, Smolderthorn
-	"1288,1294", -- Anvilmar, Undermine
-	"1165,1377", -- Arathor, Drenden
-	"75,1570", -- Argent Dawn, The Scryers
-	"1297,99", -- Arygos, Llane
-	"1555,1067,101", -- Auchindoun, Cho'gall, Laughing Skull
-	"77,1128,79,103", -- Azgalor, Azshara, Destromath, Thunderlord
-	"121,1143", -- Azjol-Nerub, Khaz Modan
-	"1549,160", -- Azuremyst, Staghelm
-	"1190,13", -- Baelgun, Doomhammer
-	"1280,1068,74", -- Black Dragonflight, Gul'dan, Skullcrusher
-	"54,1581", -- Blackhand, Galakrond
-	"1347,125", -- Blackwater Raiders, Shadow Council
-	"1296,81,154,1266,1295", -- Blackwing Lair, Dethecus, Detheroc, Haomarush, Lethon
-	"1353,1147", -- Bladefist, Kul Tiras
-	"1564,105", -- Blade's Edge, Thunderhorn
-	"1558,70,1131", -- Blood Furnace, Mannoroth, Nazjatar
-	"64,1258", -- Bloodhoof, Duskwood
-	"119,112,111,1357,108", -- Bloodscalp, Boulderfist, Dunemaul, Maiev, Stonemaul
-	"1371,85", -- Borean Tundra, Shadowsong
-	"117,1364", -- Bronzebeard, Shandris
-	"91,95,1285", -- Burning Blade, Lightning's Blade, Onyxia
-	"1430,1432", -- Caelestrasz, Nagrand
-	"1361,122", -- Cairne, Perenolde
-	"88,1356", -- Cenarion Circle, Sisters of Elune
-	"1556,1278,157,1286,72", -- Coilfang, Dalvengyr, Dark Iron, Demon Soul, Shattered Hand
-	"1351,87", -- Darrowmere, Windrunner
-	"1434,1134", -- Dath'Remar, Khaz'goroth
-	"1582,1173", -- Dawnbringer, Madoran
-	"15,1277,155,1557", -- Deathwing, Executus, Kalecgos, Shattered Halls
-	"1271,55", -- Dentarg, Whisperwind
-	"115,1342", -- Draenor, Echo Isles
-	"114,1345", -- Dragonblight, Fenris
-	"1139,113", -- Draka, Suramar
-	"1362,127,1148,1358,124,110", -- Drak'Tharon, Firetree, Malorne, Rivendare, Spirestone, Stormscale
-	"1140,131", -- Drak'thul, Skywall
-	"1429,1433", -- Dreadmaul, Thaurissan
-	"63,1270", -- Durotan, Ysera
-	"58,1354", -- Eitrigg, Shu'halo
-	"123,1349", -- Eldre'Thalas, Korialstrasz
-	"67,97", -- Elune, Gilneas
-	"96,1567", -- Eonar, Velen
-	"93,92,82,159", -- Eredar, Gorefiend, Spinebreaker, Wildhammer
-	"1565,62", -- Exodar, Medivh
-	"1370,12,1154", -- Farstriders, Silver Hand, Thorium Brotherhood
-	"118,126", -- Feathermoon, Scarlet Crusade
-	"128,8,1360", -- Frostmane, Ner'zhul, Tortheldrin
-	"7,1348", -- Frostwolf, Vashj
-	"1578,1069", -- Ghostlands, Kael'thas
-	"1287,153", -- Gnomeregan, Moonrunner
-	"158,1292", -- Greymane, Tanaris
-	"1579,68", -- Grizzly Hills, Lothar
-	"1149,1144", -- Gundrak, Jubei'Thos
-	"53,1572", -- Hellscream, Zangarmarsh
-	"1368,90", -- Hydraxis, Terenas
-	"14,104", -- Icecrown, Malygos
-	"98,1262", -- Kargath, Norgannon
-	"4,1355", -- Kilrogg, Winterhoof
-	"1071,1290,1260", -- Kirin Tor, Sentinels, Steamwheedle Cartel
-	"1130,163,1289", -- Lightninghoof, Maelstrom, The Venture Co
-	"1132,1175", -- Malfurion, Trollbane
-	"1350,1151", -- Misha, Rexxar
-	"1374,86", -- Mok'Nathal, Silvermoon
-	"1182,1359", -- Muradin, Nordrassil
-	"1367,1375,1184", -- Nazgrel, Nesingwary, Vek'nilash
-	"1372,1185", -- Quel'dorei, Sen'jin
-	"1072,1283", -- Ravencrest, Uldaman
-	"1352,164", -- Ravenholdt, Twisting Nether
-	"151,3", -- Runetotem, Uther
+--{{ US
+"4,US,4,1355",
+"5,US,5",
+"7,US,7,1348",
+"9,US,9",
+"10,US,10",
+"11,US,11",
+"12,US,12,1154,1370",
+"47,US,47,1354",
+"51,US,51",
+"52,US,52,65",
+"53,US,53,1572",
+"54,US,54,1581",
+"55,US,55,1271",
+"57,US,57",
+"58,US,58",
+"60,US,60",
+"61,US,61",
+"62,US,62,1565",
+"63,US,63,1270",
+"64,US,64,1258",
+"67,US,67,97",
+"68,US,68,1579",
+"69,US,69",
+"70,US,70,1131,1558",
+"71,US,71,80,1075,1293,1344",
+"73,US,73",
+"74,US,74,1068,1280",
+"75,US,75,1570",
+"76,US,76",
+"77,US,77,79,103,1128",
+"78,US,78,1264,1268,1282",
+"84,US,84,1137,1145",
+"85,US,85,1371",
+"86,US,86,1374",
+"87,US,87,1351",
+"90,US,90,1368",
+"91,US,91,95,1285",
+"96,US,96,1567",
+"98,US,98,1262",
+"99,US,99,1297",
+"100,US,100",
+"101,US,101,1067,1555",
+"104,US,104,14",
+"105,US,105,1564",
+"106,US,106,1576",
+"113,US,113,1139",
+"114,US,114,1345",
+"115,US,115,1342",
+"116,US,116,1363",
+"117,US,117,1364",
+"118,US,118,126",
+"119,US,119,108,111,112,1357",
+"120,US,120",
+"121,US,121,1143",
+"122,US,122,1361",
+"123,US,123,1349",
+"125,US,125,1347",
+"127,US,127,110,124,1148,1358,1362",
+"128,US,128,8,1360",
+"131,US,131,1140",
+"151,US,151,3",
+"153,US,153,1287",
+"154,US,154,81,94,1266,1295,1296",
+"155,US,155,15,1277,1557",
+"156,US,156,1259,1267,1276",
+"157,US,157,72,1278,1286,1556",
+"158,US,158,1292",
+"159,US,159,82,92,93",
+"160,US,160,1549",
+"162,US,162",
+"163,US,163,1130,1289",
+"164,US,164,1352",
+"1069,US,1069,1578",
+"1070,US,1070,1563",
+"1071,US,1071,1260,1290",
+"1072,US,1072,1283",
+"1129,US,1129,56,102,1291,1559",
+"1136,US,1136,83,109,129,1142",
+"1138,US,1138,89,107,130,1141,1346",
+"1146,US,1146",
+"1147,US,1147,1353",
+"1151,US,1151,1350",
+"1165,US,1165,1377",
+"1168,US,2",
+"1169,US,88,1356",
+"1171,US,1369",
+"1173,US,1173,1582",
+"1174,US,1288,1294",
+"1175,US,1175,1132",
+"1182,US,1182,1359",
+"1184,US,1184,1367,1375",
+"1185,US,1185,1372",
+"1190,US,1190,13",
+"1425,US,1425",
+"1426,US,1284",
+"1427,US,1427",
+"1428,US,1428",
+"3207,US,3207",
+"3208,US,3208,3210",
+"3209,US,3209",
+"3234,US,3234",
+"3661,US,6",
+"3675,US,1365",
+"3676,US,1566",
+"3677,US,1373",
+"3678,US,1263",
+"3683,US,66",
+"3684,US,59",
+"3685,US,1265",
+"3693,US,16",
+"3694,US,1",
+"3721,US,3721,3734",
+"3722,US,3722",
+"3723,US,3723",
+"3724,US,3724,3733",
+"3725,US,3725",
+"3726,US,3726,3735",
+"3728,US,3736,3737",
+"3729,US,3738",
 --}}
---{{ Europe
-	-- Current:  http://eu.battle.net/wow/en/forum/topic/8715582685
-	-- Upcoming: http://eu.battle.net/wow/en/forum/topic/9582578502
-
-	-- English
-	-- PVE
-	"1082,1391,1394", -- Kul Tiras / Alonsus / Anachronos
-	"1081,1312", -- Bronzebeard / Aerie Peak
-	"1416,1298,1310", -- Blade's Edge / Vek'nilash / Eonar
-	"1313,552", -- Wildhammer / Thunderhorn
-	"1311,547,1589", -- Kilrogg / Runetotem / Nagrand
-	"500,619", -- Aggramar / Hellscream
-	"1587,501", -- Hellfire / Arathor
-	"633,630,1087,1392,556", -- Kor’gall / Bloodfeather / Executus / Burning Steppes / Shattered Hand
-	"503,623", -- Azjol-Nerub / Quel'Thalas
-	"1588,507", -- Ghostlands / Dragonblight
-	"1389,1415,1314", -- Darkspear / Terokkar / Saurfang
-	"502,548", -- Aszune / Shadowsong
-	"1080,504", -- Khadgar / Bloodhoof
-	"1393,618", -- Bronze Dragonflight / Nordrassil
-	"1388,1089", -- Lightbringer / Mazrigos
-	"1417,550", -- Azuremyst / Stormrage
-	"505,553", -- Doomhammer / Turalyon
-	"508,551", -- Emerald Dream / Terenas
-	-- PVP
-	"1598,607,1093,1088,1090,1083,1299,526,621,511", -- Shattered Halls / Balnazzar / Ahn'Qiraj / Trollbane / Talnivarr / Chromaggus / Boulderfist / Daggerspine / Laughing Skull / Sunstrider
-	"1091,518,646,525,522,513", -- Emeriss / Agamaggan / Hakkar / Crushridge / Bloodscalp / Twilight's Hammer
-	"1303,1413", -- Grim Batol / Aggra
-	"1596,637,527,627", -- Karazhan / Lightning’s Blade / Deathwing / The Maelstrom
-	"1597,529,1304", -- Auchindoun / Dunemaul / Jaedenar
-	"528,558,638,629,559", -- Dragonmaw / Spinebreaker / Haomarush / Vashj / Stormreaver
-	"515,521,632", -- Zenedar / Bladefist / Frostwhisper
-	"639,557,519", -- Xavius / Skullcrusher / Al'Akir
-	"631,606,624", -- Darksorrow / Genjuros / Neptulon
-	"1092,523", -- Drak’thul / Burning Blade
-	"1084,1306", -- Dentarg / Tarren Mill
-	-- RP
-	"1085,1595,1117", -- Moonglade / The Sha'tar / Steamwheedle Cartel
-	"1317,561", -- Darkmoon Faire / Earthen Ring
-	-- RP PVP
-	"1096,1308,636,1606,635", -- Scarshield Legion / Ravenholdt / The Venture Co / Sporeggar / Defias Brotherhood
-
-	-- French
-	-- PVE
-	"1620,510", -- Chants éternels / Vol'jin
-	"540,645", -- Elune / Varimathras
-	"1621,538", -- Marécage de Zangar / Dalaran
-	"1123,1332", -- Eitrigg / Krasus
-	"1331,517", -- Suramar / Medivh
-	"1122,641", -- Uldaman / Drek'Thar
-	-- PvE
-	"1620,510", -- Chants éternels / Vol'jin
-	"540,645", -- Elune / Varimathras
-	"1621,538", -- Marécage de Zangar / Dalaran
-	"1123,1332", -- Eitrigg / Krasus
-	"1331,517", -- Suramar / Medivh
-	"1122,641", -- Uldaman / Drek'Thar
-	-- PvP
-	"512,643,642,543", -- Arak-arahm / Throk'Feroth / Rashgarroth / Kael'Thas
-	"1624,1334,1622,541", -- Naxxramas / Arathi / Temple noir / Illidan
-	"546,509,544", -- Sargeras / Garona / Ner'zhul
-	"1336,545,533", -- Eldre'Thalas / Cho'gall / Sinstralis
-	-- RP
-	"1127,1626,647", -- Confrérie du Thorium / Les Clairvoyants / Les Sentinelles
-	-- RP PvP
-	"1086,1337,644", -- La Croisade écarlate / Culte de la Rive noire / Conseil des Ombres
-
-	-- German
-	-- PVE
-	"567,1323", -- Gilneas / Ulduar
-	"1401,1608,574", -- Garrosh / Shattrath / Nozdormu
-	"1607,562", -- Nethersturm / Alexstrasza
-	"1400,1404,602", -- Un'GoroArea 52 / Sen'jin
-	"1330,568", -- Ambossar / Kargath
-	"1097,1324", -- Ysera / Malorne
-	"1098,572", -- Malygos / Malfurion
-	"1106,1409", -- Tichondrius / Lordaeron
-	"1406,569", -- Arygos / Khaz'goroth
-	"1407,575", -- Teldrassil / Perenolde
-	"535,1328", -- Durotan / Tirion
-	"570,565", -- Lothar / Baelgun
-	"1408,600", -- Norgannon / Dun Morogh
-	"1099,563", -- Rexxar / Alleria
-	"593,571", -- Proudmoore / Madmortem
-	-- PVP
-	"1105,1321,584,573,608", -- Nazjatar / Dalvengyr / Frostmourne / Zuluhed / Anub'arak
-	"578,1318,1613,588,609", -- Arthas / Vek'lor / Blutkessel / Kel'Thuzad / Wrathbringer
-	"531,615,1319,605,610", -- Dethecus / Terrordar / Mug'thol / Theradras / Onyxia
-	"1612,1320,590", -- Echsenkessel / Taerar / Mal'Ganis
-	"1104,1611,1322,587,594,589", -- Anetheron / Festung der Stürme / Rajaxx / Gul'dan / Nathrezim / Kil'jaeden
-	"612,611,591,582,586", -- Nefarian / Nera'thor / Mannoroth / Destromath / Gorgonnash
-	"579,616", -- Azshara / Krag'jin
-	-- RP
-	"1118,576", -- Die ewige Wacht / Die Silberne Hand
-	"1405,592", -- Todeswache / Zirkel des Cenarius
-	"1327,617", -- Der Mithrilorden / Der Rat von Dalaran
-	"516,1333", -- Die Nachtwache / Forscherliga
-	-- RP PVP
-	"1121,1119,614,1326,613,1619", -- Die Arguswacht / Die Todeskrallen / Das Syndikat / Der abyssische Rat / Kult der Verdammten / Das Konsortium
-
-	-- Spanish
-	-- PVE
-	"1385,1386", -- Exodar / Minahonda
-	"1395,1384,1387", -- Colinas Pardas / Tyrande / Los Errantes
-	-- PVP
-	"1379,1382,1383,1380", -- Zul'jin / Sanguino / Shen'dralar / Uldum
-
-	-- Russian
-	-- PVP
-	"1924,1617", -- Booty Bay (RU) / Deathweaver (RU)
-	"1609,1616", -- Deepholm (RU) / Razuvious (RU)
-	"1927,1926", -- Grom (RU) / Thermaplugg (RU)
-	"1603,1610", -- Lich King (RU) / Greymane (RU)
+--{{ EU
+"509,EU,509,544,546",
+"510,EU,510,1620",
+"512,EU,512,543,642,643",
+"516,EU,516,1333",
+"531,EU,531,605,610,615,1319",
+"535,EU,535,1328",
+"567,EU,567,1323",
+"568,EU,568,1330",
+"570,EU,570,565",
+"578,EU,578,588,609,1318,1613",
+"579,EU,579,616",
+"580,EU,580",
+"581,EU,581",
+"604,EU,604",
+"612,EU,612,582,586,591,611",
+"633,EU,633,556,630,1087,1392",
+"639,EU,639,519,557",
+"1080,EU,1080,504",
+"1081,EU,1081,1312",
+"1082,EU,1082,1391,1394",
+"1084,EU,1084,1306",
+"1085,EU,1085,1117,1595",
+"1086,EU,1086,644,1337",
+"1091,EU,1091,513,518,522,525,646",
+"1092,EU,1092,523",
+"1096,EU,1096,635,636,1308,1606",
+"1097,EU,1097,1324",
+"1098,EU,1098,572",
+"1099,EU,1099,563",
+"1104,EU,1104,587,589,594,1322,1611",
+"1105,EU,1105,573,584,608,1321",
+"1106,EU,1106,1409",
+"1118,EU,1118,576",
+"1121,EU,1121,613,614,1119,1326,1619",
+"1122,EU,1122,641",
+"1123,EU,1123,1332",
+"1127,EU,1127,647,1626",
+"1300,EU,1300",
+"1301,EU,1301",
+"1302,EU,539",
+"1303,EU,1303,1413",
+"1305,EU,1305",
+"1307,EU,1307",
+"1309,EU,1309",
+"1311,EU,1311,547,1589",
+"1313,EU,1313,552",
+"1315,EU,540,645",
+"1316,EU,1316",
+"1317,EU,1317,561",
+"1325,EU,500,619",
+"1327,EU,1327,617",
+"1329,EU,554",
+"1331,EU,1331,517",
+"1335,EU,1335",
+"1336,EU,1336,533,545",
+"1378,EU,1378",
+"1379,EU,1379,1380,1382,1383",
+"1381,EU,1381",
+"1384,EU,1384,1387,1395",
+"1385,EU,1385,1386",
+"1388,EU,1388,1089",
+"1389,EU,1389,1314,1415",
+"1390,EU,542",
+"1393,EU,1393,618",
+"1396,EU,503,623",
+"1400,EU,1400,602,1404",
+"1401,EU,1401,574,1608",
+"1402,EU,505,553",
+"1403,EU,506",
+"1405,EU,1405,592",
+"1406,EU,1406,569",
+"1407,EU,1407,575",
+"1408,EU,1408,600",
+"1416,EU,1416,1298,1310",
+"1417,EU,1417,550",
+"1587,EU,1587,501",
+"1588,EU,1588,507",
+"1596,EU,1596,527,627,637",
+"1597,EU,1597,529,1304",
+"1598,EU,1598,511,526,607,621,1083,1088,1090,1093,1299",
+"1602,EU,1602",
+"1603,EU,1603,1610",
+"1604,EU,1604",
+"1605,EU,1605",
+"1607,EU,1607,562",
+"1609,EU,1609,1616",
+"1612,EU,1612,590,1320",
+"1614,EU,1614",
+"1615,EU,1615",
+"1618,EU,1618",
+"1621,EU,1621,538",
+"1623,EU,1623",
+"1624,EU,1624,541,1334,1622",
+"1625,EU,1625",
+"1922,EU,1922",
+"1923,EU,1923",
+"1924,EU,1924,1617",
+"1925,EU,1925",
+"1927,EU,1927,1926",
+"1928,EU,1928",
+"1929,EU,1929",
+"2073,EU,560",
+"2074,EU,508,551",
+"3391,EU,549",
+"3656,EU,528,558,559,629,638",
+"3657,EU,515,521,632",
+"3660,EU,606,624,631",
+"3666,EU,502,548",
+"3674,EU,625",
+"3679,EU,577",
+"3680,EU,601",
+"3681,EU,622",
+"3682,EU,626",
+"3686,EU,564",
+"3687,EU,628",
+"3690,EU,640",
+"3691,EU,566",
+"3692,EU,583",
+"3696,EU,571,593",
+"3702,EU,536",
+"3703,EU,585",
+"3713,EU,524",
+"3714,EU,537",
 --}}
---{{ Korea
-	-- https://github.com/phanx-wow/LibRealmInfo/issues/8
-	-- PVE
-	"201,2111", -- 불타는 군단 / 스톰레이지
-	"2106,2079,214", -- 렉사르 / 와일드해머 / 윈드러너
-	-- PVP
-	"258,2108", -- 알렉스트라자 / 데스윙
-	"2110,207,264,211", -- 세나리우스 / 달라란 / 말퓨리온 / 노르간논
-	"212,215,2116", -- 가로나 / 굴단 / 줄진
+--{{ KR
+"201,KR,201,2111",
+"205,KR,205",
+"210,KR,210",
+"214,KR,214,2079,2106",
+"293,KR,293",
+"2107,KR,2107",
+"2108,KR,2108,258",
+"2110,KR,2110,207,211,264",
+"2116,KR,2116,212,215",
 --}}
---{{ Taiwan
-	-- inferred by GUID sniffing, needs confirmation by GetAutoCompleteRealms
-	"3663,982,1038",
-	"963,1056,1033",
-	"964,1001,1057",
-	"966,1043,965",
-	"978,1023",
-	"980,1046",
-	"985,1049",
-	"999,979,1054",
+--{{ TW
+"963,TW,963,1033,1056",
+"964,TW,964,1001,1057",
+"966,TW,966,965,1043",
+"977,TW,977,1006,1037",
+"978,TW,978,1023",
+"980,TW,980,1046",
+"984,TW,1048",
+"985,TW,985,1049",
+"999,TW,999,979,1054",
+"3663,TW,982,1038,2075",
 --}}
 }
 
