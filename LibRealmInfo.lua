@@ -191,38 +191,6 @@ function Unpack()
 	collectgarbage()
 
 	debug("Done unpacking data.")
---[[
-	local auto = { GetAutoCompleteRealms() }
-	if #auto > 1 then
-		local id, _, _, _, _, _, _, _, connections = lib:GetRealmInfo(GetRealmName())
-		if not id then
-			return
-		end
-		if not connections then
-			print("|cffffff7fLibRealmInfo:|r Missing connected realm info for", id, GetRealmName())
-			return
-		end
-		for i = 1, #auto do
-			local name = auto[i]
-			auto[name] = true
-			auto[i] = nil
-		end
-		for i = 1, #connections do
-			local _, name = GetRealmInfo(connections[i])
-			if auto[name] then
-				auto[name] = nil
-			else
-				auto[name] = connections[i]
-			end
-		end
-		if next(auto) then
-			print("|cffffff7fLibRealmInfo:|r Incomplete connected realm info for", id, GetRealmName())
-			for name, id in pairs(auto) do
-				print(name, id == true and "MISSING" or "INCORRECT")
-			end
-		end
-	end
-]]
 end
 
 ------------------------------------------------------------------------
