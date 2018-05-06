@@ -31,6 +31,10 @@ local function shallowCopy(t)
 	return n
 end
 
+local function getNameForAPI(name)
+	return name and (name:gsub("[%s%-]", "")) or nil
+end
+
 ------------------------------------------------------------------------
 
 local currentRegion
@@ -139,35 +143,28 @@ function Unpack()
 	debug("Unpacking data...")
 
 	for id, info in pairs(realmData) do
-		if not strfind(info, ",") then
-			-- This server doesn't belong to a specific realm
-			-- but may be used to temporarily host other realms
-			-- and can be used to determine the player's region.
-			realmData[id] = {
-				region = info,
-			}
-		else
-			-- Normal realm server
-			-- Aegwynn,PVP,enUS,US,CST
-			-- Азурегос,PvE,ruRU,EU,Azuregos
-			local name, rules, locale, region, timezone = strsplit(",", info)
-			local englishName
-			if region ~= "US" then
-				englishName = timezone
-				timezone = nil
-			end
-			realmData[id] = {
-				id = id,
-				name = name,
-				nameForAPI = (gsub(name, "[%s%-]", "")),
-				rules = rules,
-				locale = locale,
-				region = region,
-				timezone = timezone, -- only for realms in US region
-				englishName = englishName, -- only for realms with non-Latin names
-				englishNameForAPI = englishName and gsub(englishName, "[%s%-]", "") or nil, -- only for realms with non-Latin names
-			}
+		-- Aegwynn,PVP,enUS,US,CST
+		-- Nathrezim,PvP,deDE,EU
+		-- Азурегос,PvE,ruRU,EU,Azuregos
+		local name, rules, locale, region, timezone = strsplit(",", info)
+
+		local englishName
+		if region ~= "US" then
+			englishName = timezone
+			timezone = nil
 		end
+
+		realmData[id] = {
+			id = id,
+			name = name,
+			nameForAPI = getNameForAPI(name),
+			rules = string.upper(rules),
+			locale = locale,
+			region = region,
+			timezone = timezone, -- only for realms in US region
+			englishName = englishName, -- only for realms with non-Latin names
+			englishNameForAPI = getNameForAPI(englishName), -- only for realms with non-Latin names
+		}
 	end
 
 	for i = 1, #connectionData do
