@@ -23,6 +23,14 @@ local function debug(...)
 	end
 end
 
+local function shallowCopy(t)
+	local n = {}
+	for k, v in next, t do
+		n[k] = v
+	end
+	return n
+end
+
 ------------------------------------------------------------------------
 
 local currentRegion
@@ -74,7 +82,7 @@ function lib:GetRealmInfo(name, region)
 
 	for id, realm in pairs(realmData) do
 		if realm.region == region and (realm.api_name == name or realm.name == name or realm.latin_api_name == name or realm.latin_name == name) then
-			return id, realm.name, realm.api_name, realm.rules, realm.locale, nil, realm.region, realm.timezone, realm.connections, realm.latin_name, realm.latin_api_name
+			return id, realm.name, realm.api_name, realm.rules, realm.locale, nil, realm.region, realm.timezone, shallowCopy(realm.connections), realm.latin_name, realm.latin_api_name
 		end
 	end
 
@@ -94,7 +102,7 @@ function lib:GetRealmInfoByID(id)
 
 	local realm = realmData[id]
 	if realm and realm.name then
-		return realm.id, realm.name, realm.api_name, realm.rules, realm.locale, nil, realm.region, realm.timezone, realm.connections, realm.latin_name, realm.latin_api_name
+		return realm.id, realm.name, realm.api_name, realm.rules, realm.locale, nil, realm.region, realm.timezone, shallowCopy(realm.connections), realm.latin_name, realm.latin_api_name
 	end
 
 	debug("No info found for realm ID", name)
@@ -157,7 +165,7 @@ function Unpack()
 				region = region,
 				timezone = timezone, -- only for realms in US region
 				latin_name = latin_name, -- only for realms with non-Latin names
-				latin_api_name = latin_name and (gsub(latin_name, "[%s%-]", "")) or nil, -- only for realms with non-Latin names
+				latin_api_name = latin_name and gsub(latin_name, "[%s%-]", "") or nil, -- only for realms with non-Latin names
 			}
 		end
 	end
