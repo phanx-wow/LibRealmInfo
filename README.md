@@ -32,11 +32,13 @@ All of the above methods return the following values:
 3. `apiName` - the name of the realm without spaces, as seen in chat etc.
 4. `rules` - one of "PVP", "PVE", "RP" or "RPPVP"
 5. `locale` - the official language of the realm
-6. `battlegroup` - the name of the realm's battlegroup
+6. *nil*
 7. `region` - one of "US", "EU", "KR", "CN" or "TW"
 8. `timezone` - for realms in the US region, a string describing the realm's time zone, eg. "PST" or "AEST"
 9. `connections` - for connected realms, a table listing the IDs of connected realms
 10. `latinName` - for Russian-language realms, the English name of the realm
 11. `latinApiName` - for Russian-language realms, the English name of the realm without spaces
+
+The 6th returned value was previously the name of the realm's battlegroup. However, as battlegroups are no longer relevant, LibRealmInfo no longer provides this information. A nil value is returned in this position for backwards compatibility.
 
 Note that the realm IDs contained in the GUIDs of player characters on connected realms indicate the realm hosting the connected realm group, which may not be the realm that character actually belongs to. Use [GetPlayerInfoByGUID](http://wowpedia.org/API_GetPlayerInfoByGUID) to get the real realm name, or use the :GetRealmInfoByGUID or :GetRealmInfoByUnit methods provided by LibRealmInfo.
