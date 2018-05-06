@@ -172,17 +172,19 @@ function Unpack()
 		local connectionID = tonumber(table.remove(connectedRealms, 1))
 		local region = table.remove(connectedRealms, 1)
 
+		if not realmData[connectionID] then
+			-- nameless server used to host connected realms
+			table.insert(connectedRealms, connectionID)
+			realmData[connectionID] = {
+				region = region,
+				connections = connectedRealms
+			}
+		end
+
 		for j = 1, #connectedRealms do
 			local realmID = tonumber(connectedRealms[j])
 			connectedRealms[j] = realmID
 			realmData[realmID].connections = connectedRealms
-		end
-
-		if not realmData[connectionID] then
-			-- nameless server used to host connected realms
-			realmData[connectionID] = {
-				region = region
-			}
 		end
 	end
 
