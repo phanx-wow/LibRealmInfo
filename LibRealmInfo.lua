@@ -81,8 +81,8 @@ function lib:GetRealmInfo(name, region)
 	end
 
 	for id, realm in pairs(realmData) do
-		if realm.region == region and (realm.api_name == name or realm.name == name or realm.latin_api_name == name or realm.latin_name == name) then
-			return id, realm.name, realm.api_name, realm.rules, realm.locale, nil, realm.region, realm.timezone, shallowCopy(realm.connections), realm.latin_name, realm.latin_api_name
+		if realm.region == region and (realm.nameForAPI == name or realm.name == name or realm.englishNameForAPI == name or realm.englishName == name) then
+			return id, realm.name, realm.nameForAPI, realm.rules, realm.locale, nil, realm.region, realm.timezone, shallowCopy(realm.connections), realm.englishName, realm.englishNameForAPI
 		end
 	end
 
@@ -102,7 +102,7 @@ function lib:GetRealmInfoByID(id)
 
 	local realm = realmData[id]
 	if realm and realm.name then
-		return realm.id, realm.name, realm.api_name, realm.rules, realm.locale, nil, realm.region, realm.timezone, shallowCopy(realm.connections), realm.latin_name, realm.latin_api_name
+		return realm.id, realm.name, realm.nameForAPI, realm.rules, realm.locale, nil, realm.region, realm.timezone, shallowCopy(realm.connections), realm.englishName, realm.englishNameForAPI
 	end
 
 	debug("No info found for realm ID", name)
@@ -151,21 +151,21 @@ function Unpack()
 			-- Aegwynn,PVP,enUS,US,CST
 			-- Азурегос,PvE,ruRU,EU,Azuregos
 			local name, rules, locale, region, timezone = strsplit(",", info)
-			local latin_name
+			local englishName
 			if region ~= "US" then
-				latin_name = timezone
+				englishName = timezone
 				timezone = nil
 			end
 			realmData[id] = {
 				id = id,
 				name = name,
-				api_name = (gsub(name, "[%s%-]", "")),
+				nameForAPI = (gsub(name, "[%s%-]", "")),
 				rules = rules,
 				locale = locale,
 				region = region,
 				timezone = timezone, -- only for realms in US region
-				latin_name = latin_name, -- only for realms with non-Latin names
-				latin_api_name = latin_name and gsub(latin_name, "[%s%-]", "") or nil, -- only for realms with non-Latin names
+				englishName = englishName, -- only for realms with non-Latin names
+				englishNameForAPI = englishName and gsub(englishName, "[%s%-]", "") or nil, -- only for realms with non-Latin names
 			}
 		end
 	end
