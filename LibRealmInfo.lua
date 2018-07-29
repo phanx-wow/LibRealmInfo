@@ -24,6 +24,8 @@ local function debug(...)
 end
 
 local function shallowCopy(t)
+	if not t then return end
+
 	local n = {}
 	for k, v in next, t do
 		n[k] = v
@@ -185,6 +187,30 @@ function Unpack()
 			local realmID = tonumber(connectedRealms[j])
 			connectedRealms[j] = realmID
 			realmData[realmID].connections = connectedRealms
+		end
+	end
+
+	-- Partial workaround for missing Chinese connected realm data:
+	local autoCompleteRealms = GetAutoCompleteRealms()
+	if #autoCompleteRealms > 0 then
+		local autoCompleteIDs = {}
+		for _, name in pairs(autoCompleteRealms) do
+			for realmID, realm in pairs(realmData) do
+				if realm.nameForAPI == name then
+					table.insert(autoCompleteIDs, realmID)
+					break
+				end
+			end
+		end
+		if #autoCompleteIDs == #autoCompleteRealms then
+			for _, realmID in pairs(autoCompleteIDs) do
+				local realm = realmData[realmID]
+				if realm and not realm.connections then
+					realm.connections = autoCompleteIDs
+				end
+			end
+		else
+			debug("Failed to match names from GetAutoCompleteRealms!")
 		end
 	end
 
