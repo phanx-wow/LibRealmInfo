@@ -8,7 +8,7 @@
 	https://www.wowinterface.com/downloads/info22987-LibRealmInfo
 ----------------------------------------------------------------------]]
 
-local MAJOR, MINOR = "LibRealmInfo", 12
+local MAJOR, MINOR = "LibRealmInfo", 13
 assert(LibStub, MAJOR.." requires LibStub")
 local lib, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
