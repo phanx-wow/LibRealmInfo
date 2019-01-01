@@ -27,6 +27,6 @@ If you only need to know which region (US, Europe, etc.) the player is currently
 
 The realm IDs encoded in the GUIDs of player characters on connected realms identify the server currently hosting the connected realm group, which may not be the realm that character actually belongs to. Pass the GUID to [GetPlayerInfoByGUID](http://wowpedia.org/API_GetPlayerInfoByGUID) to get the character's real realm name, or use the `GetRealmInfoByGUID` or `GetRealmInfoByUnit` methods provided by LibRealmInfo.
 
-### No data available for Chinese realms
+### Chinese realm info out of date
 
-LibRealmInfo currently does not include any data about Chinese realms. Realm info is pulled from the Blizzard Developer API, but getting info about Chinese realms would require a separate Chinese Battle.net account, which I do not have. If you have a Chinese Battle.net account and are willing to help, please [open a ticket](https://github.com/phanx-wow/LibRealmInfo/issues) or [email me](mailto:addons@phanx.net).
+Realm info is obtained from the Blizzard Developer API for accuracy, but getting info about Chinese realms would require a separate Chinese Battle.net account, which I do not have. The info for Chinese realms in LibRealmInfo is therefore the old manually compiled data, which may be inaccurate or outdated, and info about connected realms is missing entirely. If you have a Chinese Battle.net account and are willing to help, please [open a ticket](https://github.com/phanx-wow/LibRealmInfo/issues) or [email me](mailto:addons@phanx.net).
