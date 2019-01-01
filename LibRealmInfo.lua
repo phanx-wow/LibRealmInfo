@@ -1,7 +1,7 @@
 --[[--------------------------------------------------------------------
 	LibRealmInfo
 	World of Warcraft library for obtaining information about realms.
-	Copyright 2014-2018 Phanx <addons@phanx.net>
+	Copyright 2014-2019 Phanx <addons@phanx.net>
 	Zlib license. Standalone distribution strongly discouraged.
 	https://github.com/phanx-wow/LibRealmInfo
 	https://wow.curseforge.com/projects/librealminfo
