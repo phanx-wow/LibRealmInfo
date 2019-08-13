@@ -111,6 +111,11 @@ function lib:GetRealmInfoByID(id)
 		return realm.id, realm.name, realm.nameForAPI, realm.rules, realm.locale, nil, realm.region, realm.timezone, shallowCopy(realm.connections), realm.englishName, realm.englishNameForAPI
 	end
 
+	-- This is a virtual realm: return its alias instead
+	if realm and realm.alias ~= nil then
+		return self:GetRealmInfoByID(realm.alias)
+	end
+
 	debug("No info found for realm ID", name)
 end
 
@@ -144,6 +149,7 @@ end
 function Unpack()
 	debug("Unpacking data...")
 
+	local id, info
 	for id, info in pairs(realmData) do
 		-- Aegwynn,PvE,enUS,US,CST
 		-- Nathrezim,PvE,deDE,EU
@@ -169,23 +175,35 @@ function Unpack()
 		}
 	end
 
+	local i, j
 	for i = 1, #connectionData do
 		local connectedRealms = { strsplit(",", connectionData[i]) }
 		local connectionID = tonumber(table.remove(connectedRealms, 1))
 		local region = table.remove(connectedRealms, 1)
 
+		-- Convert string IDs into numbers
+		for j = 1, #connectedRealms do
+			connectedRealms[j] = tonumber(connectedRealms[j])
+		end
+
+		-- nameless virtual realm used to host connected realms
 		if not realmData[connectionID] then
-			-- nameless server used to host connected realms
+			-- Consider the realm with the lowest ID as an alias of the virtual realm
+			local aliasRealmId = min(unpack(connectedRealms))
+
+			-- Add virtual realm to connected realms list
 			table.insert(connectedRealms, connectionID)
+
+			-- Add virtual realm with its alias
 			realmData[connectionID] = {
 				region = region,
-				connections = connectedRealms
+				alias = aliasRealmId
 			}
 		end
 
-		for j = 1, #connectedRealms do
-			local realmID = tonumber(connectedRealms[j])
-			connectedRealms[j] = realmID
+		-- Set connected realm IDs for each realm
+		local realmID
+		for _, realmID in ipairs(connectedRealms) do
 			realmData[realmID].connections = connectedRealms
 		end
 	end
@@ -194,6 +212,7 @@ function Unpack()
 	local autoCompleteRealms = GetAutoCompleteRealms()
 	if #autoCompleteRealms > 0 then
 		local autoCompleteIDs = {}
+		local name
 		for _, name in pairs(autoCompleteRealms) do
 			for realmID, realm in pairs(realmData) do
 				if realm.nameForAPI == name then
@@ -202,6 +221,7 @@ function Unpack()
 				end
 			end
 		end
+		local realmID
 		if #autoCompleteIDs == #autoCompleteRealms then
 			for _, realmID in pairs(autoCompleteIDs) do
 				local realm = realmData[realmID]
