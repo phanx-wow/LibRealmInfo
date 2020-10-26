@@ -30,3 +30,19 @@ The realm IDs encoded in the GUIDs of player characters on connected realms iden
 ### Chinese realm info out of date
 
 Realm info is obtained from the Blizzard Developer API for accuracy, but getting info about Chinese realms would require a separate Chinese Battle.net account, which I do not have. The info for Chinese realms in LibRealmInfo is therefore the old manually compiled data, which may be inaccurate or outdated, and info about connected realms is missing entirely. If you have a Chinese Battle.net account and are willing to help, please [open a ticket](https://github.com/phanx-wow/LibRealmInfo/issues) or [email me](mailto:addons@phanx.net).
+
+===========MY REMARKS===========
+-
+I forked this library to keep up to date, Phanx seems to have given up addon development and Maintence and the old library was getting seriously outdated with new connections not being reflected, and the Chinese data being incomplete and outdated.
+
+Note About US Server Timezones
+----------
+Blizzard has a tendancy to change the timezones of Mainland US servers during realm connections, All realms in a cluser use the timezone assigned to the "Host server". Up to date timezone information can be sourced here: https://worldofwarcraft.com/en-us/game/status/us
+
+Note About Chinese servers
+----------
+English translations of are taken from official Blizzard sources where possible (Hall of Fame, PTR char transfer etc), in some cases, I have not been able to extract all the names and have manually translated some of them, which could result in some minor indescreptencies. Blizzards Server list for Chinese servers is only availible in Chinese, and thus its impossible to extract english server names from it. I make no guarientee that all the translations are 100% correct with Blizzards naming of the server but will do my best to update any errors found.
+
+Classic Server Data
+----------
+Long term goal is to add this data as well, would have to collect the Realm IDs from all 5 regions first however.
