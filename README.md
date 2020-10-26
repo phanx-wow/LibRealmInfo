@@ -31,7 +31,8 @@ The realm IDs encoded in the GUIDs of player characters on connected realms iden
 
 Realm info is obtained from the Blizzard Developer API for accuracy, but getting info about Chinese realms would require a separate Chinese Battle.net account, which I do not have. The info for Chinese realms in LibRealmInfo is therefore the old manually compiled data, which may be inaccurate or outdated, and info about connected realms is missing entirely. If you have a Chinese Battle.net account and are willing to help, please [open a ticket](https://github.com/phanx-wow/LibRealmInfo/issues) or [email me](mailto:addons@phanx.net).
 
-===========MY REMARKS===========
+===MY REMARKS===
+-
 
 I forked this library to keep up to date, Phanx seems to have given up addon development and Maintence and the old library was getting seriously outdated with new connections not being reflected, and the Chinese data being incomplete and outdated.
 
