@@ -40,7 +40,4 @@ I forked this library to keep up to date, Phanx seems to have given up addon dev
 Blizzard has a tendancy to change the timezones of Mainland US servers during realm connections, All realms in a cluser use the timezone assigned to the "Host server". Up to date timezone information can be sourced here: https://worldofwarcraft.com/en-us/game/status/us
 
 ### Note About Chinese servers
-English translations of are taken from official Blizzard sources where possible (Hall of Fame, PTR char transfer etc), in some cases, I have not been able to extract all the names and have manually translated some of them, which could result in some minor indescreptencies. Blizzards Server list for Chinese servers is only availible in Chinese, and thus its impossible to extract english server names from it. I make no guarientee that all the translations are 100% correct with Blizzards naming of the server but will do my best to update any errors found.
-
-### Classic Server Data
-Long term goal is to add this data as well, would have to collect the Realm IDs from all 5 regions first however.
+English translations of are taken from official Blizzard sources where possible (Hall of Fame, PTR char transfer etc), in some cases, particilarly with Classic servers, I have not been able to extract all the names and have manually translated some of them, this could result in some minor indescreptencies. Blizzards Server list for Chinese servers is only availible in Chinese, and thus its impossible to extract english server names from it. I make no guarientee that all the translations are 100% correct with Blizzards naming of the server but will do my best to update any errors found.
